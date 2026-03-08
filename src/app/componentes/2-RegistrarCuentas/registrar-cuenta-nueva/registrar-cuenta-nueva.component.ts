@@ -6,7 +6,7 @@ import { toast } from 'ngx-sonner';
 import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 import { Subject, switchMap, throwError, takeUntil } from 'rxjs';
 import { CrudService } from '../../../servicio/crud.service';
-
+import { environment } from '../../../../environments/environment';
 /** Validador personalizado que verifica que los campos pass1 y pass2 sean identicos. */
 function contrasenasCoincidenValidator(group: AbstractControl): ValidationErrors | null {
   const pass1 = group.get('pass1')?.value;
@@ -112,32 +112,34 @@ export class RegistrarCuentaNuevaComponent implements OnInit, OnDestroy {
 
   /** Valida el formulario, verifica la aceptacion de TOS y registra la cuenta en el backend. */
   submit(): void {
-    this.formularioDeCliente.markAllAsTouched();
+  this.formularioDeCliente.markAllAsTouched();
 
-    if (this.formularioDeCliente.invalid) {
-      toast.error('Corrige los campos antes de continuar.');
-      return;
-    }
+  if (this.formularioDeCliente.invalid) {
+    toast.error('Corrige los campos antes de continuar.');
+    return;
+  }
 
-    if (!this.aceptoTOS) {
-      toast.error('Debes aceptar los terminos y condiciones.');
-      return;
-    }
+  if (!this.aceptoTOS) {
+    toast.error('Debes aceptar los terminos y condiciones.');
+    return;
+  }
 
-    const { Email: email, pass1: contrasena } = this.formularioDeCliente.value;
-    this.cargando = true;
+  const { Email: email, pass1: contrasena } = this.formularioDeCliente.value;
+  this.cargando = true;
 
+  if (environment.demo === 'SI') {
     this.crudService.AgregarCliente({ email, contrasena }).pipe(
-      switchMap((response) => {
-        if (!response.success) {
-          return throwError(() => new Error(response.error || 'Error al crear la cuenta.'));
-        }
-        return this.crudService.ActivarCorreo(email);
-      }),
       takeUntil(this.destroy$)
     ).subscribe({
-      next: () => {
-        toast.success('Cuenta creada. Revisa tu correo para activarla.');
+      next: (response) => {
+        if (!response.success) {
+          this.cargando = false;
+          toast.error(response.error || 'Error al crear la cuenta.');
+          return;
+        }
+        toast.info('Modo demo activo', {
+          description: 'Cuenta creada. No se requiere activacion por correo.'
+        });
         this.router.navigate(['Login']);
       },
       error: (err: Error) => {
@@ -145,7 +147,28 @@ export class RegistrarCuentaNuevaComponent implements OnInit, OnDestroy {
         toast.error(err?.message || 'Error desconocido. Intenta mas tarde.');
       }
     });
+    return;
   }
+
+  this.crudService.AgregarCliente({ email, contrasena }).pipe(
+    switchMap((response) => {
+      if (!response.success) {
+        return throwError(() => new Error(response.error || 'Error al crear la cuenta.'));
+      }
+      return this.crudService.ActivarCorreo(email);
+    }),
+    takeUntil(this.destroy$)
+  ).subscribe({
+    next: () => {
+      toast.success('Cuenta creada. Revisa tu correo para activarla.');
+      this.router.navigate(['Login']);
+    },
+    error: (err: Error) => {
+      this.cargando = false;
+      toast.error(err?.message || 'Error desconocido. Intenta mas tarde.');
+    }
+  });
+}
 
   /** Alterna la visibilidad de la primera contrasena. */
   togglePass1(): void { this.mostrarPass1 = !this.mostrarPass1; }
