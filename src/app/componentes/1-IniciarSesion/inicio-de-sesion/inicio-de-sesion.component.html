@@ -1,0 +1,63 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card card-small">
+
+    <div class="card-header">Inicio de sesión</div>
+
+    <div class="card-body">
+      <form [formGroup]="formularioDeLogin" (ngSubmit)="submit()">
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label class="form-label">Correo Electrónico</label>
+          <input type="email" class="form-control form-control-sm" [class.is-invalid]="emailInvalido"
+            placeholder="Escribe tu correo electrónico" formControlName="email" />
+          <div class="invalid-feedback">
+            <ng-container *ngIf="emailCtrl.hasError('required')">El correo es obligatorio.</ng-container>
+            <ng-container *ngIf="emailCtrl.hasError('email')">Ingresa un correo válido.</ng-container>
+          </div>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="mb-3">
+          <label class="form-label">Contraseña</label>
+          <div class="input-group">
+            <input [type]="mostrarContrasena ? 'text' : 'password'" class="form-control form-control-sm"
+              [class.is-invalid]="contrasenaInvalida" placeholder="Escribe tu contraseña"
+              formControlName="contrasena" />
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="toggleContrasena()" tabindex="-1">
+              <lucide-icon [img]="mostrarContrasena ? EyeOff : Eye" size="16" />
+            </button>
+            <div class="invalid-feedback">
+              <ng-container *ngIf="contrasenaCtrl.hasError('required')">La contraseña es obligatoria.</ng-container>
+              <ng-container *ngIf="contrasenaCtrl.hasError('minlength')">Mínimo 6 caracteres.</ng-container>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón Ingresar -->
+        <div class="btn-group d-flex mb-2" role="group">
+          <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="cargando">
+            <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2" role="status"></span>
+            {{ cargando ? 'Ingresando...' : 'Ingresar' }}
+          </button>
+        </div>
+
+        <!-- Olvidé mi contraseña -->
+        <div class="btn-group d-flex mb-2" role="group">
+          <button type="button" class="btn btn-morado btn-lg w-100" (click)="irAOlvidar()" [disabled]="cargando">
+            Olvidé mi contraseña
+          </button>
+        </div>
+
+        <!-- No tengo cuenta -->
+        <div class="btn-group d-flex" role="group">
+          <button type="button" class="btn btn-success btn-lg w-100" (click)="irARegistrar()" [disabled]="cargando">
+            No tengo cuenta
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Pedidos</title>
+</head>
+
+<body>
+ 
+  <div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
+    <div class="container">
+      <div class="row justify-content-between w-100 align-items-center">
+        <div class="col-lg-5">
+          <div class="intro-excerpt">
+            <h5 class="display-4 text-white" style="font-size: 1.5rem;">Pedidos</h5>
+          </div>
+        </div>
+        <div class="col-lg-4 text-end text-white small" *ngIf="usuarioActual">
+          Hola, <strong>{{ usuarioActual.apodo }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="untree_co-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center pt-5">
+
+          <!--  PEDIDOS-->
+
+          <!-- Filtro + selector de items por página -->
+          <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+
+            <div class="d-flex align-items-center gap-2">
+              <label class="mb-0 small" for="estadoPedido">Estado:</label>
+              <select id="estadoPedido" name="estadoPedido" class="form-select form-select-sm" style="width: auto;"
+                (change)="CambioDeEstado($event)">
+                <option value="Todos">Todos</option>
+                <option value="Completado">Completado</option>
+                <option value="En reparto">En reparto</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Cancelado">Cancelado</option>
+              </select>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <label class="mb-0 small">Mostrar</label>
+              <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="itemsPorPaginaPedidos"
+                (ngModelChange)="onItemsPorPaginaPedidosChange()">
+                <option [ngValue]="2">2</option>
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="20">20</option>
+              </select>
+              <label class="mb-0 small">por página</label>
+            </div>
+
+            <span class="ms-auto small text-muted">
+              {{ TipoB.length }} pedido(s) — Página {{ paginaActualPedidos }} de {{ totalPaginasPedidos }}
+            </span>
+
+          </div>
+
+          <!-- Tabla de pedidos -->
+          <div class="site-blocks-table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="small-text">ID del pedido</th>
+                  <th class="small-text">Fecha del pedido</th>
+                  <th class="small-text">Fecha de entrega</th>
+                  <th class="small-text">Estado</th>
+                  <th class="small-text">ID del cliente</th>
+                  <th class="small-text">Cliente</th>
+                  <th class="small-text">Dirección</th>
+                  <th class="small-text">Cambiar estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let producto of pedidosPaginados">
+
+                  <td class="small-text">{{ producto.id }}</td>
+                  <td class="small-text">{{ producto.fechaPedido }}</td>
+                  <td class="small-text">{{ producto.fechaEntrega ?? '—' }}</td>
+                  <td class="small-text">{{ producto.estado }}</td>
+                  <td class="small-text">{{ producto.cliente.id }}</td>
+                  <td class="small-text">{{ producto.cliente.apodo }}</td>
+
+                  <td class="small-text">
+                    <ng-container *ngIf="getDireccion(producto) as dir">
+                      <span (click)="openModal(dir)"
+                        style="cursor: pointer; color: rgb(0,0,0); display:inline-flex; align-items:center; gap:4px;">
+                        <lucide-icon [img]="Eye" size="14"></lucide-icon>
+                        {{ dir | slice:0:10 }}...
+                      </span>
+                    </ng-container>
+                  </td>
+
+                  <td class="small-text">
+                    <select (change)="CambioDeEstadoPedido($event, producto.id)" class="form-select" [value]="'NO'">
+                      <option value="NO" disabled>{{ producto.estado }}</option>
+                      <option value="En reparto" [attr.disabled]="producto.estado !== 'Pendiente' ? true : null">
+                        En reparto
+                      </option>
+                      <option value="Completado" [attr.disabled]="producto.estado !== 'En reparto' ? true : null">
+                        Completado
+                      </option>
+                      <option value="Cancelado"
+                        [attr.disabled]="(producto.estado !== 'En reparto' && producto.estado !== 'Pendiente') ? true : null">
+                        Cancelado
+                      </option>
+                    </select>
+                  </td>
+
+                </tr>
+
+                <!-- Estado vacío -->
+                <tr *ngIf="TipoB.length === 0">
+                  <td colspan="8" class="text-center text-muted py-3">
+                    <lucide-icon [img]="RefreshCw" size="16" class="me-1"></lucide-icon>
+                    No hay pedidos para mostrar
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Paginación — Pedidos -->
+          <nav *ngIf="totalPaginasPedidos > 1" aria-label="Paginación de pedidos">
+            <ul class="pagination justify-content-center mt-2 mb-4">
+
+              <li class="page-item" [class.disabled]="paginaActualPedidos === 1">
+                <button class="page-link d-flex align-items-center gap-1"
+                  (click)="irAPaginaPedidos(paginaActualPedidos - 1)">
+                  <lucide-icon [img]="ChevronLeft" size="14"></lucide-icon>
+                  Anterior
+                </button>
+              </li>
+
+              <ng-container *ngFor="let p of paginasPedidos">
+                <li class="page-item" [class.active]="p === paginaActualPedidos"
+                  *ngIf="p === 1 || p === totalPaginasPedidos || (p >= paginaActualPedidos - 2 && p <= paginaActualPedidos + 2)">
+                  <button class="page-link" (click)="irAPaginaPedidos(p)">{{ p }}</button>
+                </li>
+                <li class="page-item disabled"
+                  *ngIf="(p === paginaActualPedidos - 3 && paginaActualPedidos - 3 > 1) || (p === paginaActualPedidos + 3 && paginaActualPedidos + 3 < totalPaginasPedidos)">
+                  <span class="page-link">…</span>
+                </li>
+              </ng-container>
+
+              <li class="page-item" [class.disabled]="paginaActualPedidos === totalPaginasPedidos">
+                <button class="page-link d-flex align-items-center gap-1"
+                  (click)="irAPaginaPedidos(paginaActualPedidos + 1)">
+                  Siguiente
+                  <lucide-icon [img]="ChevronRight" size="14"></lucide-icon>
+                </button>
+              </li>
+
+            </ul>
+          </nav>
+
+          <br>
+
+          <!--  DEVOLUCIONES-->
+          <h2 class="h3 mb-3 text-black">Solicitudes de devolución</h2>
+
+          <!-- Selector de items por página — Reembolsos -->
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <label class="mb-0 small">Mostrar</label>
+            <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="itemsPorPaginaReembolsos"
+              (ngModelChange)="onItemsPorPaginaReembolsosChange()">
+              <option [ngValue]="2">2</option>
+              <option [ngValue]="5">5</option>
+              <option [ngValue]="10">10</option>
+              <option [ngValue]="20">20</option>
+            </select>
+            <label class="mb-0 small">por página</label>
+            <span class="ms-auto small text-muted">
+              {{ productos.length }} solicitud(es) — Página {{ paginaActualReembolsos }} de {{ totalPaginasReembolsos }}
+            </span>
+          </div>
+
+          <!-- Tabla de devoluciones -->
+          <div class="site-blocks-table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Motivo de devolución</th>
+                  <th>Fecha de Reembolso</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let reembolso of reembolsosPaginados; let i = index">
+
+                  <td>{{ reembolso.id }}</td>
+
+                  <td>
+                    <span (click)="openModal(reembolso.motivo || 'Sin motivo')"
+                      style="cursor:pointer; color:rgb(0,0,0); display:inline-flex; align-items:center; gap:4px;">
+                      <lucide-icon [img]="Eye" size="14"></lucide-icon>
+                      {{ (reembolso.motivo || '') | slice:0:20 }}{{ (reembolso.motivo || '').length > 20 ? '...' : '' }}
+                    </span>
+                  </td>
+
+                  <td>{{ reembolso.fechaReembolso | date:'shortDate' }}</td>
+
+                  <!-- Estado derivado de reembolso.autorizada -->
+                  <td>
+                    <span *ngIf="reembolso.autorizada === 'SI'" class="badge bg-success">Autorizado</span>
+                    <span *ngIf="reembolso.autorizada === 'NO'" class="badge bg-danger">Denegado</span>
+                    <span *ngIf="reembolso.autorizada !== 'SI' && reembolso.autorizada !== 'NO'"
+                      class="badge bg-warning text-dark">Pendiente</span>
+                  </td>
+
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <a class="btn btn-sm btn-success" (click)="Aceptar(reembolso)"
+                        style="text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                        <lucide-icon [img]="CheckCircle" size="14"></lucide-icon>
+                        Aceptar
+                      </a>
+                      <a class="btn btn-sm btn-secondary"
+                        (click)="Denegar(reembolso, (paginaActualReembolsos - 1) * itemsPorPaginaReembolsos + i)"
+                        style="text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                        <lucide-icon [img]="XCircle" size="14"></lucide-icon>
+                        Denegar
+                      </a>
+                    </div>
+                  </td>
+
+                </tr>
+
+                <!-- Estado vacío -->
+                <tr *ngIf="productos.length === 0">
+                  <td colspan="5" class="text-center text-muted py-3">No hay solicitudes pendientes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Paginación — Reembolsos -->
+          <nav *ngIf="totalPaginasReembolsos > 1" aria-label="Paginación de reembolsos">
+            <ul class="pagination justify-content-center mt-2 mb-4">
+
+              <li class="page-item" [class.disabled]="paginaActualReembolsos === 1">
+                <button class="page-link d-flex align-items-center gap-1"
+                  (click)="irAPaginaReembolsos(paginaActualReembolsos - 1)">
+                  <lucide-icon [img]="ChevronLeft" size="14"></lucide-icon>
+                  Anterior
+                </button>
+              </li>
+
+              <ng-container *ngFor="let p of paginasReembolsos">
+                <li class="page-item" [class.active]="p === paginaActualReembolsos"
+                  *ngIf="p === 1 || p === totalPaginasReembolsos || (p >= paginaActualReembolsos - 2 && p <= paginaActualReembolsos + 2)">
+                  <button class="page-link" (click)="irAPaginaReembolsos(p)">{{ p }}</button>
+                </li>
+                <li class="page-item disabled"
+                  *ngIf="(p === paginaActualReembolsos - 3 && paginaActualReembolsos - 3 > 1) || (p === paginaActualReembolsos + 3 && paginaActualReembolsos + 3 < totalPaginasReembolsos)">
+                  <span class="page-link">…</span>
+                </li>
+              </ng-container>
+
+              <li class="page-item" [class.disabled]="paginaActualReembolsos === totalPaginasReembolsos">
+                <button class="page-link d-flex align-items-center gap-1"
+                  (click)="irAPaginaReembolsos(paginaActualReembolsos + 1)">
+                  Siguiente
+                  <lucide-icon [img]="ChevronRight" size="14"></lucide-icon>
+                </button>
+              </li>
+
+            </ul>
+          </nav>
+
+          <div *ngIf="modalAbierto" class="cuadrito-overlay">
+            <div class="cuadrito-content">
+              <span class="close" (click)="closeMotivoModal()" style="cursor:pointer;">&times;</span>
+              <h4>Detalle completo</h4>
+              <p>{{ selectedMotivo }}</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

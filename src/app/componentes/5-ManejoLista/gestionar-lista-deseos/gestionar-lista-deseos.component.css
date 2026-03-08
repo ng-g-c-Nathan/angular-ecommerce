@@ -1,0 +1,35 @@
+/* ─── Paginación personalizada ─────────────────────────── */
+.pagination .page-link {
+  background-color: transparent;
+  border: 1px solid #2c2c2c;
+  color: #1a1a1a;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+  font-weight: 600;
+}
+
+.pagination .page-item.disabled .page-link {
+  background-color: transparent;
+  border-color: #ddd;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.pagination .page-item.active .page-link:focus,
+.pagination .page-link:focus {
+  box-shadow: 0 0 0 0.2rem rgba(26, 26, 26, 0.2);
+  outline: none;
+}

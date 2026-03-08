@@ -1,0 +1,329 @@
+<div>
+  <div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-lg-5">
+          <div class="intro-excerpt">
+            <h5 class="display-4 text-white" style="font-size: 1.5rem;">
+              Administracion de Productos
+            </h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="untree_co-section before-footer-section">
+    <div class="container">
+
+      <div class="row mb-5">
+        <div class="col-md-12 text-center">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-lg py-3 px-4" [class.btn-black]="tabActivo === 'agregar'"
+              [class.btn-outline-black]="tabActivo !== 'agregar'" (click)="setTab('agregar')">
+              <lucide-icon [img]="PlusCircle" [size]="18" class="me-2"></lucide-icon> Agregar
+            </button>
+            <button type="button" class="btn btn-lg py-3 px-4" [class.btn-black]="tabActivo === 'editar'"
+              [class.btn-outline-black]="tabActivo !== 'editar'" (click)="setTab('editar')">
+              <lucide-icon [img]="Pencil" [size]="18" class="me-2"></lucide-icon> Editar
+            </button>
+            <button type="button" class="btn btn-lg py-3 px-4" [class.btn-black]="tabActivo === 'borrar'"
+              [class.btn-outline-black]="tabActivo !== 'borrar'" (click)="setTab('borrar')">
+              <lucide-icon [img]="Trash2" [size]="18" class="me-2"></lucide-icon> Borrar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <div class="p-4 p-lg-5 border bg-white shadow-sm rounded">
+
+            <!--  AGREGAR  -->
+            <form [formGroup]="formularioAgregar" (ngSubmit)="agregar()"*ngIf="tabActivo === 'agregar'">
+              <h3 class="h4 mb-4 text-black border-bottom pb-2">Alta de Producto</h3>
+
+              <div class="form-group mb-3">
+                <label class="text-black">
+                  <lucide-icon [img]="Tag" [size]="14"></lucide-icon> Nombre
+                </label>
+                <input type="text" class="form-control" formControlName="agregarNombre"
+                  placeholder="Nombre del producto">
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="text-black">
+                  <lucide-icon [img]="AlignLeft" [size]="14"></lucide-icon> Descripcion
+                </label>
+                <textarea class="form-control" formControlName="agregarDescripcion" rows="2"
+                  placeholder="Descripcion detallada"></textarea>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 form-group mb-3">
+                  <label class="text-black">
+                    <lucide-icon [img]="DollarSign" [size]="14"></lucide-icon> Precio
+                  </label>
+                  <input type="number" class="form-control" formControlName="agregarPrecio"
+                    placeholder="0.00" min="0.01" step="0.01"
+                    [class.is-invalid]="formularioAgregar.get('agregarPrecio')?.touched && formularioAgregar.get('agregarPrecio')?.errors?.['min']">
+                  <div class="invalid-feedback"
+                    *ngIf="formularioAgregar.get('agregarPrecio')?.touched && formularioAgregar.get('agregarPrecio')?.errors?.['min']">
+                    El precio debe ser mayor a 0.
+                  </div>
+                </div>
+                <div class="col-md-6 form-group mb-3">
+                  <label class="text-black">
+                    <lucide-icon [img]="Boxes" [size]="14"></lucide-icon> Stock
+                  </label>
+                  <input type="number" class="form-control" formControlName="agregarStock"
+                    placeholder="0" min="0" step="1"
+                    [class.is-invalid]="formularioAgregar.get('agregarStock')?.touched && formularioAgregar.get('agregarStock')?.errors?.['min']">
+                  <div class="invalid-feedback"
+                    *ngIf="formularioAgregar.get('agregarStock')?.touched && formularioAgregar.get('agregarStock')?.errors?.['min']">
+                    El stock no puede ser negativo.
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="text-black">
+                  <lucide-icon [img]="Layers" [size]="14"></lucide-icon> Categoria
+                </label>
+                <select class="form-select" formControlName="agregarCategoria" (change)="onCategoriaAgregar($event)">
+                  <option value="default" disabled selected>Selecciona una categoria</option>
+                  <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+                  <option value="">Otra (escribir)</option>
+                </select>
+                <input *ngIf="categoriaSeleccionadaAgregar === ''" class="form-control mt-2" type="text"
+                  formControlName="agregarCategoria" placeholder="Escribe la categoria">
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="text-black">
+                  <lucide-icon [img]="Truck" [size]="14"></lucide-icon> Proveedor
+                </label>
+                <select class="form-select" formControlName="agregarProveedor">
+                  <option value="" selected disabled>Selecciona un proveedor</option>
+                  <option *ngFor="let p of proveedor" [value]="p.id">{{ p.nombreEmpresa }}</option>
+                </select>
+              </div>
+
+              <!-- Fotografia + preview -->
+              <div class="form-group mb-4">
+                <label class="text-black">
+                  <lucide-icon [img]="Image" [size]="14"></lucide-icon> Fotografia (GIF)
+                </label>
+                <input type="file" class="form-control" (change)="onFileSelectedAgregar($event)" accept="image/gif">
+                <small class="text-muted" *ngIf="selectedFileAgregarName">{{ selectedFileAgregarName }}</small>
+
+                <!-- Preview del GIF seleccionado -->
+                <div *ngIf="previewAgregar" class="mt-3 text-center">
+                  <p class="text-muted small mb-1">Vista previa:</p>
+                  <img [src]="previewAgregar" alt="Vista previa"
+                    class="img-thumbnail rounded shadow-sm"
+                    style="max-height: 180px; object-fit: contain;">
+                </div>
+              </div>
+
+              <button class="btn btn-black btn-lg py-3 btn-block" type="submit">
+                <lucide-icon [img]="Save" [size]="18" class="me-2"></lucide-icon> Agregar Producto
+              </button>
+            </form>
+
+            <!--  EDITAR  -->
+            <form [formGroup]="formularioAEditar" *ngIf="tabActivo === 'editar'">
+              <h3 class="h4 mb-4 text-black border-bottom pb-2">Editar Producto</h3>
+
+              <div class="form-group mb-4 p-3 bg-light border rounded">
+                <label class="text-black">
+                  <strong><lucide-icon [img]="Hash" [size]="14"></lucide-icon> ID del producto</strong>
+                </label>
+                <div class="input-group">
+                  <input type="text" class="form-control" formControlName="EditarID" (input)="saberQueEditar()"
+                    placeholder="Escribe el ID para buscar...">
+                  <span class="input-group-text bg-white" *ngIf="mostrarCamposEditar">
+                    <lucide-icon [img]="CheckCircle" color="green" [size]="18"></lucide-icon>
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="text-black">
+                  <lucide-icon [img]="Tag" [size]="14"></lucide-icon> Nombre
+                </label>
+                <input type="text" class="form-control" formControlName="EditarNombre" placeholder="—">
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="text-black">
+                  <lucide-icon [img]="AlignLeft" [size]="14"></lucide-icon> Descripcion
+                </label>
+                <input type="text" class="form-control" formControlName="EditarDescripcion" placeholder="—">
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 form-group mb-3">
+                  <label class="text-black">
+                    <lucide-icon [img]="DollarSign" [size]="14"></lucide-icon> Precio
+                  </label>
+                  <input type="number" class="form-control" formControlName="EditarPrecio"
+                    placeholder="—" min="0.01" step="0.01"
+                    [class.is-invalid]="formularioAEditar.get('EditarPrecio')?.touched && formularioAEditar.get('EditarPrecio')?.errors?.['min']">
+                  <div class="invalid-feedback"
+                    *ngIf="formularioAEditar.get('EditarPrecio')?.touched && formularioAEditar.get('EditarPrecio')?.errors?.['min']">
+                    El precio debe ser mayor a 0.
+                  </div>
+                </div>
+                <div class="col-md-6 form-group mb-3">
+                  <label class="text-black">
+                    <lucide-icon [img]="Boxes" [size]="14"></lucide-icon> Stock
+                  </label>
+                  <input type="number" class="form-control" formControlName="EditarStock"
+                    placeholder="—" min="0" step="1"
+                    [class.is-invalid]="formularioAEditar.get('EditarStock')?.touched && formularioAEditar.get('EditarStock')?.errors?.['min']">
+                  <div class="invalid-feedback"
+                    *ngIf="formularioAEditar.get('EditarStock')?.touched && formularioAEditar.get('EditarStock')?.errors?.['min']">
+                    El stock no puede ser negativo.
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="text-black">
+                  <lucide-icon [img]="Layers" [size]="14"></lucide-icon> Categoria
+                </label>
+                <select class="form-select" formControlName="EditarCategoria" (change)="onCategoriaEditar($event)">
+                  <option [value]="categoriaElegida">
+                    {{ categoriaElegida  }}
+                  </option>
+                  <option *ngFor="let cat of categoriasMenos" [value]="cat">{{ cat }}</option>
+                  <option value="">Otra (escribir)</option>
+                </select>
+                <input *ngIf="categoriaSeleccionadaEditar === ''" class="form-control mt-2" type="text"
+                  formControlName="EditarCategoria" placeholder="Escribe la categoria">
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="text-black">
+                  <lucide-icon [img]="Truck" [size]="14"></lucide-icon> Proveedor
+                </label>
+                <select class="form-select" formControlName="EditarProveedor">
+                  <option *ngFor="let p of opcionesProveedor" [value]="p.id">{{ p.nombre }}</option>
+                </select>
+              </div>
+
+              <!-- Foto actual + nueva -->
+              <div class="form-group mb-4">
+                <label class="text-black">
+                  <lucide-icon [img]="Image" [size]="14"></lucide-icon> Actualizar fotografia (GIF)
+                </label>
+                <input type="file" class="form-control" (change)="onFileSelectedEditar($event)" accept="image/gif">
+                <small class="text-muted" *ngIf="selectedFileEditarName">{{ selectedFileEditarName }}</small>
+
+                <!-- Fotos: actual y nueva en paralelo si hay nueva, solo actual si no -->
+                <div *ngIf="previewEditarActual || previewEditarNueva" class="mt-3">
+                  <div class="d-flex gap-4 justify-content-center flex-wrap">
+                    <div *ngIf="previewEditarActual" class="text-center">
+                      <p class="text-muted small mb-1">Foto actual:</p>
+                      <img [src]="previewEditarActual" alt="Foto actual"
+                        class="img-thumbnail rounded shadow-sm"
+                        style="max-height: 160px; object-fit: contain;">
+                    </div>
+                    <div *ngIf="previewEditarNueva" class="text-center">
+                      <p class="text-muted small mb-1">Foto nueva:</p>
+                      <img [src]="previewEditarNueva" alt="Foto nueva"
+                        class="img-thumbnail rounded shadow-sm border-success"
+                        style="max-height: 160px; object-fit: contain; border-width: 2px !important;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-black btn-lg py-3 btn-block" type="button" [disabled]="!mostrarCamposEditar"
+                (click)="actualizar()">
+                <lucide-icon [img]="RefreshCw" [size]="18" class="me-2"></lucide-icon> Actualizar Producto
+              </button>
+            </form>
+
+            <!--  BORRAR  -->
+            <form [formGroup]="formularioBorrar" *ngIf="tabActivo === 'borrar'">
+              <h3 class="h4 mb-4 text-danger border-bottom pb-2">Borrar Producto</h3>
+
+              <div class="form-group mb-4 p-3 bg-light border rounded">
+                <label class="text-black">
+                  <strong><lucide-icon [img]="Hash" [size]="14"></lucide-icon> ID del producto</strong>
+                </label>
+                <div class="input-group">
+                  <input type="text" class="form-control" formControlName="BorrarID" (input)="queBorrar()"
+                    placeholder="Escribe el ID para borrar...">
+                  <span class="input-group-text bg-white" *ngIf="mostrarCamposBorrar">
+                    <lucide-icon [img]="CheckCircle" color="green" [size]="18"></lucide-icon>
+                  </span>
+                </div>
+              </div>
+
+              <!-- Preview foto del producto a borrar -->
+              <div *ngIf="previewBorrar" class="mb-4 text-center">
+                <p class="text-muted small mb-1">Foto del producto:</p>
+                <img [src]="previewBorrar" alt="Foto del producto"
+                  class="img-thumbnail rounded shadow-sm"
+                  style="max-height: 180px; object-fit: contain; opacity: 0.85;">
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="text-muted">
+                  <lucide-icon [img]="Tag" [size]="14"></lucide-icon> Nombre
+                </label>
+                <input type="text" class="form-control bg-light" formControlName="BorrarNombre" readonly>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="text-muted">
+                  <lucide-icon [img]="AlignLeft" [size]="14"></lucide-icon> Descripcion
+                </label>
+                <input type="text" class="form-control bg-light" formControlName="BorrarDescripcion" readonly>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 form-group mb-3">
+                  <label class="text-muted">
+                    <lucide-icon [img]="DollarSign" [size]="14"></lucide-icon> Precio
+                  </label>
+                  <input type="number" class="form-control bg-light" formControlName="BorrarPrecio" readonly>
+                </div>
+                <div class="col-md-6 form-group mb-3">
+                  <label class="text-muted">
+                    <lucide-icon [img]="Boxes" [size]="14"></lucide-icon> Stock
+                  </label>
+                  <input type="number" class="form-control bg-light" formControlName="BorrarStock" readonly>
+                </div>
+              </div>
+
+              <div class="form-group mb-3">
+                <label class="text-muted">
+                  <lucide-icon [img]="Layers" [size]="14"></lucide-icon> Categoria
+                </label>
+                <input type="text" class="form-control bg-light" formControlName="BorrarCategoria" readonly>
+              </div>
+
+              <div class="form-group mb-4">
+                <label class="text-muted">
+                  <lucide-icon [img]="Truck" [size]="14"></lucide-icon> Proveedor
+                </label>
+                <input type="text" class="form-control bg-light" formControlName="BorrarProveedor" readonly>
+              </div>
+
+              <button class="btn btn-danger btn-lg py-3 btn-block" type="button" [disabled]="!mostrarCamposBorrar"
+                (click)="borrar()">
+                <lucide-icon [img]="Trash2" [size]="18" class="me-2"></lucide-icon> Borrar Producto
+              </button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

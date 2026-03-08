@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Facturas</title>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-lg-5">
+          <div class="intro-excerpt">
+            <h5 class="display-4 text-white" style="font-size: 1.5rem;">Facturas</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="untree_co-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 pt-5">
+
+          <!-- Campo Nombre del Emisor -->
+          <div class="mb-4" [formGroup]="facturaForm">
+            <label class="form-label fw-bold">Nombre del emisor</label>
+            <input type="text" class="form-control w-50" formControlName="Nombre"
+              placeholder="Nombre de quien expide las facturas" />
+          </div>
+
+          <!-- Tabla de facturas -->
+          <div class="site-blocks-table">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>Correo</th>
+                  <th>Cantidad de Productos</th>
+                  <th>Productos</th>
+                  <th>Estatus</th>
+                  <th class="text-center">PDF</th>
+                  <th class="text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let factura of productos; let i = index">
+
+                  <!-- Correo -->
+                  <td>{{ factura.email }}</td>
+
+                  <!-- Cantidad de productos -->
+                  <td>{{ factura.totalProductos }}</td>
+
+                  <!-- Detalle de productos con modal -->
+                  <td>
+                    <span (click)="openModal(factura.detalles, 'Productos')" style="cursor: pointer; color: #000;">
+                      {{ factura.detalles | slice:0:10 }}{{ factura.detalles.length > 10 ? '...' : '' }}
+                    </span>
+                  </td>
+
+                  <!-- Estatus con badge de color -->
+                  <td>
+                    <span class="badge" [ngClass]="{
+                        'bg-warning text-dark': factura.estatus === 'Pendiente',
+                        'bg-success':           factura.estatus === 'Aprobada',
+                        'bg-danger':            factura.estatus === 'Rechazada'
+                      }">
+                      {{ factura.estatus }}
+                    </span>
+                  </td>
+
+                  <!--  COLUMNA PDF  -->
+                  <td class="text-center">
+                    <button class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1"
+                      title="Ver PDF" (click)="verPdf(i)">
+                      <lucide-icon [img]="FileText" [size]="16" strokeWidth="2" />
+                      <span class="d-none d-md-inline" style="font-size: 0.75rem;">Ver</span>
+                    </button>
+                  </td>
+
+                  <!-- Acciones -->
+                  <td class="text-center">
+                    <div class="d-flex justify-content-center gap-2">
+
+                      <!-- Autorizar (solo si está Pendiente) -->
+                      <button *ngIf="factura.estatus === 'Pendiente'"
+                        class="btn btn-success btn-sm d-inline-flex align-items-center gap-1" title="Autorizar"
+                        (click)="autorizar(i)">
+                        <lucide-icon [img]="Check" [size]="15" strokeWidth="2.5" />
+                      </button>
+
+                      <!-- Rechazar (solo si está Pendiente) -->
+                      <button *ngIf="factura.estatus === 'Pendiente'"
+                        class="btn btn-danger btn-sm d-inline-flex align-items-center gap-1" title="Rechazar"
+                        (click)="rechazar(i)">
+                        <lucide-icon [img]="X" [size]="15" strokeWidth="2.5" />
+                      </button>
+
+                      <!-- Enviar (solo si está Aprobada) -->
+                      <button *ngIf="factura.estatus === 'Aprobada'"
+                        class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1" title="Enviar factura"
+                        (click)="enviar(i)">
+                        <lucide-icon [img]="Send" [size]="15" strokeWidth="2" />
+                      </button>
+
+                    </div>
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal PDF -->
+  <div class="modal fade show d-block" tabindex="-1" *ngIf="mostrarModalPdf" style="background: rgba(0,0,0,0.6);">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title d-flex align-items-center gap-2">
+            <lucide-icon [img]="FileText" [size]="20" strokeWidth="1.8" />
+            Vista previa de factura
+          </h5>
+          <button type="button" class="btn-close" (click)="cerrarModalPdf()"></button>
+        </div>
+
+        <div class="modal-body p-0" style="height: 80vh;">
+          <iframe [src]="pdfBlobUrl" width="100%" height="100%" style="border: none;"></iframe>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary d-inline-flex align-items-center gap-2" (click)="cerrarModalPdf()">
+            <lucide-icon [img]="XCircle" [size]="16" />
+            Cerrar
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/tiny-slider.js"></script>
+  <script src="js/custom.js"></script>
+  <div *ngIf="modalAbierto" class="cuadrito-overlay">
+    <div class="cuadrito-content">
+      <h4>{{ modalTitulo }}</h4>
+      <p>{{ modalContenido }}</p>
+      <button (click)="cerrarModal()">Cerrar</button>
+    </div>
+  </div>
+</body>
+
+</html>

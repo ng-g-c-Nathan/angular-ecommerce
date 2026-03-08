@@ -1,0 +1,162 @@
+.btn-small {
+    padding: 8px 12px; /* Adjust padding for desired size */
+    font-size: 14px; /* Adjust font size for smaller text */
+    line-height: 1; /* Ensure proper button height */
+    border-radius: 4px; /* Maintain rounded corners */
+}
+        /* ── Reset estilos del tema que afectan product-item ── */
+        .product-list-stack .product-item,
+        .product-list-stack .product-item .product-thumbnail,
+        .product-list-stack .product-item .product-title,
+        .product-list-stack .product-item .product-price {
+            all: revert;
+        }
+
+        /* ── Product list ── */
+        .product-list-stack {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: .45rem !important;
+        }
+
+        .product-row {
+            display: grid !important;
+            grid-template-columns: 44px 1fr auto !important;
+            align-items: center !important;
+            gap: .65rem !important;
+            padding: .55rem .8rem !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            border: 1px solid rgba(255,255,255,.07) !important;
+            background: transparent !important;
+            text-align: left !important;
+            transition: background .18s, border-color .18s, transform .15s !important;
+        }
+        .product-row:hover {
+            background: rgba(255,255,255,.04) !important;
+            border-color: rgba(255,255,255,.16) !important;
+            transform: translateX(3px) !important;
+        }
+        .product-row.gris {
+            opacity: .45 !important;
+            cursor: default !important;
+            pointer-events: none !important;
+        }
+
+        .product-thumbnail {
+            width: 44px !important;
+            height: 44px !important;
+            object-fit: contain !important;
+            border-radius: 5px !important;
+            background: rgba(255,255,255,.05) !important;
+            display: block !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .prod-meta {
+            min-width: 0 !important;
+            flex: 1 !important;
+        }
+
+        .product-title {
+            font-size: .8rem !important;
+            font-weight: 500 !important;
+            margin: 0 0 .08rem !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: block !important;
+            text-align: left !important;
+        }
+        .product-price {
+            font-size: .72rem !important;
+            opacity: .55 !important;
+            display: block !important;
+            text-align: left !important;
+            margin: 0 !important;
+        }
+        .product-status {
+            font-size: .65rem !important;
+            opacity: .42 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: .25rem !important;
+            margin-top: .1rem !important;
+        }
+
+        .prod-action { flex-shrink: 0 !important; }
+
+        /* Botón compacto */
+        .btn-return {
+            font-size: .72rem;
+            padding: .28rem .65rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,.18);
+            background: rgba(255,255,255,.07);
+            color: rgba(255,255,255,.6);
+            display: flex;
+            align-items: center;
+            gap: .3rem;
+            transition: background .18s, border-color .18s;
+            white-space: nowrap;
+        }
+        .btn-return:hover {
+            background: rgba(255,255,255,.13);
+            border-color: rgba(255,255,255,.32);
+            color: rgba(255,255,255,.85);
+        }
+
+        /* Separador */
+        .section-divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,.07);
+            margin: 1rem 0;
+        }
+        .section-heading {
+            font-size: .65rem;
+            text-transform: uppercase;
+            letter-spacing: .14em;
+            opacity: .38;
+            margin-bottom: .5rem;
+            display: flex;
+            align-items: center;
+            gap: .3rem;
+        }
+
+        /* Formulario compacto */
+        .devolucion-form-card {
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 10px;
+            padding: 1.25rem 1.35rem;
+            background: rgba(255,255,255,.02);
+        }
+        .devolucion-form-card .form-label {
+            font-size: .75rem;
+            opacity: .6;
+            margin-bottom: .35rem;
+        }
+        .producto-seleccionado {
+            font-size: .85rem;
+            min-height: 38px;
+            line-height: 1.4;
+            padding: .45rem .7rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,.1);
+            background: rgba(255,255,255,.03);
+            display: block;
+            word-break: break-word;
+        }
+        .devolucion-form-card textarea.form-control {
+            font-size: .82rem;
+            resize: none;
+        }
+        .aviso-pie {
+            font-size: .68rem;
+            opacity: .38;
+            display: flex;
+            align-items: flex-start;
+            gap: .3rem;
+            line-height: 1.4;
+            margin-top: 1rem;
+        }

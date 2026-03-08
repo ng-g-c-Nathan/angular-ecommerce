@@ -1,0 +1,220 @@
+<!-- /*
+* Bootstrap 5
+* Nombre de la plantilla: Furni
+* Autor de la plantilla: Untree.co
+* URI de la plantilla: https://untree.co/
+* Licencia: https://creativecommons.org/licenses/by/3.0/
+* Requisitos: Bootstrap 5
+*/ -->
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+  <title>Furni Plantilla Gratuita de Bootstrap 5 para Sitios Web de Muebles y Diseño Interior por Untree.co</title>
+</head>
+
+<body>
+  <div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-lg-5">
+          <div class="intro-excerpt">
+            <h5 class="display-4 text-white d-flex align-items-center gap-2" style="font-size: 1.5rem;">
+              <lucide-icon [img]="ShoppingCart" size="22" color="white"></lucide-icon>
+              Realizar pago de {{ Apodito }}
+            </h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="untree_co-section">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-md-12"></div>
+      </div>
+
+      <div class="row">
+
+        <!-- ── Columna izquierda: formulario de pago ── -->
+        <div class="col-md-6 mb-5 mb-md-0">
+          <div class="p-3 p-lg-5 border bg-white">
+            <div class="border p-3 mb-3">
+              <div class="payment-form">
+
+                <h2 class="d-flex align-items-center gap-2">
+                  <lucide-icon [img]="CreditCard" size="22"></lucide-icon>
+                  Realiza tu pago
+                </h2>
+                <ng-container *ngIf="HayAlgoQueCalcular && showPayPalButton">
+                  <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+                </ng-container>
+
+                <!-- Mensaje cuando el carrito está vacío -->
+                <div *ngIf="!HayAlgoQueCalcular" class="text-center py-4">
+                  <lucide-icon [img]="PackageX" size="48" class="text-muted mb-2"></lucide-icon>
+                  <p class="version" style="text-align: center;">No hay nada que comprar :(</p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Columna derecha: tabla del carrito con paginación ── -->
+        <div class="col-md-6">
+          <div class="shopping-cart-wrapper row mb-5">
+            <form class="col-md-12" method="post">
+
+              <!-- Selector de items por página + contador -->
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <label class="mb-0 small">Mostrar</label>
+                <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="itemsPorPagina"
+                  [ngModelOptions]="{standalone: true}" (ngModelChange)="onItemsPorPaginaChange()">
+                  <option [ngValue]="1">1</option>
+                  <option [ngValue]="2">2</option>
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="20">20</option>
+                </select>
+                <label class="mb-0 small">por página</label>
+                <span class="ms-auto small text-muted">
+                  {{ ArregloDeProductos.length }} producto(s) — Página {{ paginaActual }} de {{ totalPaginas }}
+                </span>
+              </div>
+
+              <div class="site-blocks-table table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th class="product-name">Nombre</th>
+                      <th class="product-quantity">Cantidad</th>
+                      <th class="product-total">Total</th>
+                      <th class="product-remove">Eliminar del carrito</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Iterar sobre productosPaginados en lugar de ArregloDeProductos -->
+                    <tr *ngFor="let producto of productosPaginados; let i = index">
+
+                      <!-- Nombre y precio unitario -->
+                      <td class="product-name">
+                        {{ producto.nombre }} ({{ producto.precio | currency }})
+                      </td>
+
+                      <!-- Control de cantidad con iconos Lucide -->
+                      <td class="product-quantity">
+                        <div class="quantity-container input-group mb-3 d-flex align-items-center">
+
+                          <div class="input-group-prepend">
+                            <button (click)="Disminuircantidad(producto, (paginaActual - 1) * itemsPorPagina + i)"
+                              class="btn btn-outline-secondary decrease" type="button" title="Disminuir cantidad">
+                              <lucide-icon [img]="Minus" size="14"></lucide-icon>
+                            </button>
+                          </div>
+
+                          <input type="text" class="form-control text-center quantity-amount" aria-label="Cantidad"
+                            [formControl]="producto.form.get('cantidad')" (focus)="guardarValorAnterior($event)"
+                            (input)="oncantidadChange($event, producto, (paginaActual - 1) * itemsPorPagina + i)" />
+
+                          <div class="input-group-append">
+                            <button (click)="Aumentarcantidad(producto)" class="btn btn-outline-secondary increase"
+                              type="button" title="Aumentar cantidad">
+                              <lucide-icon [img]="Plus" size="14"></lucide-icon>
+                            </button>
+                          </div>
+
+                        </div>
+                      </td>
+
+                      <!-- Total por producto -->
+                      <td class="product-total">
+                        {{ producto.precio * producto.form.get('cantidad').value | currency }}
+                      </td>
+
+                      <!-- Botón eliminar con icono Lucide -->
+                      <td class="product-remove">
+                        <a class="btn btn-danger d-flex align-items-center justify-content-center"
+                          style="width: 50px; height: 50px;"
+                          (click)="BorrarDeMiCarrito(producto.id, (paginaActual - 1) * itemsPorPagina + i)"
+                          role="button" title="Eliminar del carrito">
+                          <lucide-icon [img]="Trash2" size="20" color="Black"></lucide-icon>
+                        </a>
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Paginación -->
+              <nav *ngIf="totalPaginas > 1" aria-label="Paginación del carrito">
+                <ul class="pagination justify-content-center mt-3">
+
+                  <!-- Anterior -->
+                  <li class="page-item" [class.disabled]="paginaActual === 1">
+                    <button class="page-link d-flex align-items-center gap-1" type="button"
+                      (click)="irAPagina(paginaActual - 1)">
+                      <lucide-icon [img]="ChevronLeft" size="14"></lucide-icon>
+                      Anterior
+                    </button>
+                  </li>
+
+                  <!-- Números de página con elipsis -->
+                  <ng-container *ngFor="let p of paginas">
+                    <li class="page-item" [class.active]="p === paginaActual"
+                      *ngIf="p === 1 || p === totalPaginas || (p >= paginaActual - 2 && p <= paginaActual + 2)">
+                      <button class="page-link" type="button" (click)="irAPagina(p)">{{ p }}</button>
+                    </li>
+                    <!-- Elipsis izquierdo -->
+                    <li class="page-item disabled" *ngIf="p === paginaActual - 3 && paginaActual - 3 > 1">
+                      <span class="page-link">…</span>
+                    </li>
+                    <!-- Elipsis derecho -->
+                    <li class="page-item disabled" *ngIf="p === paginaActual + 3 && paginaActual + 3 < totalPaginas">
+                      <span class="page-link">…</span>
+                    </li>
+                  </ng-container>
+
+                  <!-- Siguiente -->
+                  <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+                    <button class="page-link d-flex align-items-center gap-1" type="button"
+                      (click)="irAPagina(paginaActual + 1)">
+                      Siguiente
+                      <lucide-icon [img]="ChevronRight" size="14"></lucide-icon>
+                    </button>
+                  </li>
+
+                </ul>
+              </nav>
+
+            </form>
+
+            <p class="version">
+              Si alguno de sus productos previamente agregados no aparece se debe a la falta de stock
+            </p>
+
+            <div class="col-md-6 cart-totals">
+              <span class="text-black">Total del carrito</span>
+            </div>
+            <div class="col-md-6 text-right cart-totals">
+              <strong class="text-black">{{ totalCarrito | currency }}</strong>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+
+<!-- ── Navbar ──────────────────────────────────────────────────── -->
+<div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark"
+     aria-label="Furni navigation bar">
+  <div class="container">
+    <div class="row justify-content-between align-items-center w-100">
+      <div class="col-lg-5">
+        <div class="intro-excerpt d-flex align-items-center gap-2">
+          <lucide-icon [img]="PackageSearch" color="white" size="22" />
+          <h5 class="display-4 text-white mb-0" style="font-size:1.5rem;">Mis pedidos</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4">
+  <h2 class="text-center">Productos Comprados de {{ apodito }}</h2>
+
+  <!-- Loader -->
+  <div *ngIf="cargando" class="text-center my-5">
+    <div class="spinner-border text-secondary" role="status"></div>
+  </div>
+
+  <!-- Sin devolución -->
+  <ng-container *ngIf="!cargando">
+    <div class="row justify-content-center">
+      <div *ngFor="let producto of productosSinDevolucion"
+           class="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch"
+           [@fadeIn]>
+        <div class="product-item w-100 text-center">
+          <img [src]="URL + '/assets/productos/Imagen' + producto.idProducto + '.gif'"
+               class="img-fluid product-thumbnail"
+               alt="{{ producto.nombreProducto }}">
+          <h3 class="product-title">{{ producto.nombreProducto }}</h3>
+          <strong class="product-price">{{ producto.precio | currency:'USD':'symbol':'1.2-2' }}</strong>
+          <br>
+          <strong class="product-price">Compra N°: {{ producto.idCompra }}</strong>
+          <p class="version">Estado: {{ producto.estadoPedido }}</p>
+          <button class="btn btn-sm btn-outline-secondary mt-2 d-flex align-items-center gap-1 mx-auto"
+                  (click)="abrirSolicitud(producto.nombreProducto, producto.idTransaccion, producto.idCompra, producto.idProducto, producto.precio)">
+            <lucide-icon [img]="RotateCcw" size="14" />
+            Solicitar devolución
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Con devolución -->
+    <h4 class="text-center mt-4" *ngIf="productosConDevolucion.length">
+      Devoluciones en proceso
+    </h4>
+    <div class="row justify-content-center">
+      <div *ngFor="let producto of productosConDevolucion"
+           class="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch"
+           [@fadeIn]>
+        <div class="product-item w-100 text-center">
+          <img [src]="URL + '/assets/productos/Imagen' + producto.idProducto + '.gif'"
+               class="img-fluid product-thumbnail"
+               alt="{{ producto.nombreProducto }}">
+          <h3 class="product-title">{{ producto.nombreProducto }}</h3>
+          <strong class="product-price">{{ producto.precio | currency:'USD':'symbol':'1.2-2' }}</strong>
+          <br>
+          <strong class="product-price">Compra N°: {{ producto.idCompra }}</strong>
+          <p class="version">Estado: {{ producto.estadoPedido }}</p>
+          <span class="d-flex align-items-center gap-1 justify-content-center text-success small mt-2">
+            <lucide-icon [img]="CheckCircle" size="14" />
+            Devolución solicitada
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div *ngIf="mostrarPanel"
+     class="position-fixed top-0 end-0 h-100 bg-white shadow-lg p-4"
+     style="width:340px; z-index:1050; overflow-y:auto;"
+     [@fadeIn]>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">Solicitar devolución</h5>
+    <button class="btn btn-sm btn-light" (click)="cerrarPanel()">
+      <lucide-icon [img]="X" size="16" />
+    </button>
+  </div>
+
+  <p class="text-muted small">{{ textoSeleccionado }}</p>
+
+  <div [formGroup]="formularioDevolucion">
+    <label class="form-label fw-semibold">Razón <span class="text-danger">*</span></label>
+    <textarea formControlName="Razon"
+              class="form-control"
+              rows="4"
+              placeholder="Describe el motivo de la devolución..."
+              maxlength="255"></textarea>
+    <div class="d-flex justify-content-between mt-1">
+      <small class="text-danger"
+             *ngIf="formularioDevolucion.get('Razon')?.invalid && formularioDevolucion.get('Razon')?.dirty">
+        <lucide-icon [img]="AlertCircle" size="12" /> Campo requerido (máx. 255 caracteres)
+      </small>
+      <small class="text-muted ms-auto">
+        {{ formularioDevolucion.get('Razon')?.value?.length ?? 0 }}/255
+      </small>
+    </div>
+  </div>
+
+  <button class="btn btn-dark w-100 mt-4 d-flex align-items-center justify-content-center gap-2"
+          (click)="enviarSolicitud()"
+          [disabled]="formularioDevolucion.invalid">
+    <lucide-icon [img]="RotateCcw" size="16" />
+    Enviar solicitud
+  </button>
+</div>
+
+<br><br><br>

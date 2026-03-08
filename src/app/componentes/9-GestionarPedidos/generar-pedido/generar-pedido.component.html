@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Confirmación de dirección guardada-->
+    <div class="dir-overlay" *ngIf="preguntandoDireccion && direccionGuardada">
+        <div class="dir-card">
+
+            <div class="icon-wrap">
+                <i class="fas fa-map-marker-alt" style="color:#3b5d50; font-size:1.3rem;"></i>
+            </div>
+
+            <h5 class="mb-0" style="font-weight:700; color:#1a2e26;">
+                ¿Enviamos a tu dirección registrada?
+            </h5>
+            <p class="text-muted small mb-0" style="margin-top:.3rem;">
+                Tenemos esta dirección guardada en tu perfil:
+            </p>
+
+            <div class="dir-address">
+                {{ direccionGuardada.calle }} {{ direccionGuardada.numeroExterior }}
+                <ng-container *ngIf="direccionGuardada.numeroInterior">
+                    Int. {{ direccionGuardada.numeroInterior }}
+                </ng-container><br>
+                {{ direccionGuardada.ciudad }}, {{ direccionGuardada.estado }},
+                C.P. {{ direccionGuardada.codigoPostal }}<br>
+                {{ direccionGuardada.pais }}
+                <ng-container *ngIf="direccionGuardada.instruccionesExtras">
+                    <br><span class="text-muted" style="font-size:.85rem;">
+                        {{ direccionGuardada.instruccionesExtras }}
+                    </span>
+                </ng-container>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="button" class="btn-si" (click)="usarDireccionGuardada()">
+                    <i class="fas fa-check me-1"></i> Sí, enviar aquí
+                </button>
+                <button type="button" class="btn-no" (click)="usarDireccionNueva()">
+                    <i class="fas fa-edit me-1"></i> No, ingresar otra
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Navbar -->
+    <div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h5 class="display-4 text-white" style="font-size: 1.5rem;">
+                            <lucide-icon [img]="PackageCheck" size="20" class="me-2"></lucide-icon>
+                            Genera tu pedido
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+        <div class="row justify-content-between">
+
+            <!--  Dirección de envío  -->
+            <div class="col-md-5">
+                <div class="profile-info-section">
+
+                    <!-- Header con botón para reabrir el modal -->
+                    <div class="d-flex align-items-start justify-content-between mb-3">
+                        <h2 class="h3 mb-0 text-black">
+                            Dirección de envío
+                            <br><small class="text-muted" style="font-size:.85rem; font-weight:400;">
+                                para {{ apodito  }}
+                            </small>
+                        </h2>
+
+                        <button *ngIf="direccionGuardada" type="button" class="btn-cambiar-dir mt-1"
+                            (click)="abrirModalDireccion()">
+                            <i class="fas fa-sync-alt me-1"></i> Cambiar
+                        </button>
+                    </div>
+
+                    <!-- Chip de estado -->
+                    <div class="dir-chip" *ngIf="usandoDireccionGuardada">
+                        <i class="fas fa-check-circle" style="color:#3b5d50;"></i>
+                        Usando tu dirección registrada
+                    </div>
+                    <div class="dir-chip" *ngIf="!usandoDireccionGuardada">
+                        <i class="fas fa-pencil-alt" style="color:#3b5d50;"></i>
+                        Ingresando dirección nueva
+                    </div>
+
+                    <form [formGroup]="formularioPedido" (ngSubmit)="generarPedido()">
+                        <div class="p-3 p-lg-5 border bg-white">
+
+                            <div class="form-group row">
+
+                                <!-- Selector de compra -->
+                                <div class="col-md-12 mb-3">
+                                    <label class="text-black">Pedidos pendientes</label>
+                                    <select class="form-control" formControlName="ID_Compra">
+                                        <option value="" disabled selected>Selecciona un ID de compra</option>
+                                        <option *ngFor="let producto of fechasCompras"
+                                            [value]="producto.idCompra"
+                                            [attr.disabled]="producto.posible === 'NO' ? true : null">
+                                            Compra {{ producto.idCompra }} ({{ producto.fecha }})
+                                            {{ producto.total | currency:'USD':'symbol':'1.2-2' }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="text-black">Calle</label>
+                                    <input type="text" class="form-control" formControlName="calle"
+                                        placeholder="Calle">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="text-black">Número exterior</label>
+                                    <input type="text" class="form-control" formControlName="numeroExterior"
+                                        placeholder="Número exterior">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="text-black">Número interior</label>
+                                    <input type="text" class="form-control" formControlName="numeroInterior"
+                                        placeholder="Número interior">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="text-black">Ciudad</label>
+                                    <input type="text" class="form-control" formControlName="ciudad"
+                                        placeholder="Ciudad">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="text-black">Estado</label>
+                                    <select class="form-control" formControlName="estado">
+                                        <option value="" disabled>Selecciona un estado</option>
+                                        <option value="Aguascalientes">Aguascalientes</option>
+                                        <option value="Baja California">Baja California</option>
+                                        <option value="Baja California Sur">Baja California Sur</option>
+                                        <option value="Campeche">Campeche</option>
+                                        <option value="Chiapas">Chiapas</option>
+                                        <option value="Chihuahua">Chihuahua</option>
+                                        <option value="Coahuila">Coahuila</option>
+                                        <option value="Colima">Colima</option>
+                                        <option value="Ciudad de México">Ciudad de México</option>
+                                        <option value="Durango">Durango</option>
+                                        <option value="Guanajuato">Guanajuato</option>
+                                        <option value="Guerrero">Guerrero</option>
+                                        <option value="Hidalgo">Hidalgo</option>
+                                        <option value="Jalisco">Jalisco</option>
+                                        <option value="México">México</option>
+                                        <option value="Michoacán">Michoacán</option>
+                                        <option value="Morelos">Morelos</option>
+                                        <option value="Nayarit">Nayarit</option>
+                                        <option value="Nuevo León">Nuevo León</option>
+                                        <option value="Oaxaca">Oaxaca</option>
+                                        <option value="Puebla">Puebla</option>
+                                        <option value="Querétaro">Querétaro</option>
+                                        <option value="Quintana Roo">Quintana Roo</option>
+                                        <option value="San Luis Potosí">San Luis Potosí</option>
+                                        <option value="Sinaloa">Sinaloa</option>
+                                        <option value="Sonora">Sonora</option>
+                                        <option value="Tabasco">Tabasco</option>
+                                        <option value="Tamaulipas">Tamaulipas</option>
+                                        <option value="Tlaxcala">Tlaxcala</option>
+                                        <option value="Veracruz">Veracruz</option>
+                                        <option value="Yucatán">Yucatán</option>
+                                        <option value="Zacatecas">Zacatecas</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="text-black">Código Postal</label>
+                                    <input type="text" class="form-control" formControlName="codigoPostal"
+                                        placeholder="Código Postal">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="text-black">País</label>
+                                    <input type="text" class="form-control" formControlName="pais"
+                                        placeholder="País">
+                                </div>
+
+                            </div>
+
+                            <br>
+
+                            <div class="form-group row mb-5">
+                                <div class="col-md-12">
+                                    <label class="text-black">Instrucciones extras para envío</label>
+                                    <input type="text" class="form-control" formControlName="instruccionesExtras"
+                                        placeholder="Instrucciones extras">
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <p class="text-muted">
+                                    Cualquier duda, dirígete al correo electrónico o al número 555-246-2221.
+                                </p>
+                            </div>
+
+                            <div class="btn-group d-flex" role="group">
+                                <button type="submit" class="btn btn-lg w-100"
+                                    style="background-color: #3b5d50; color: #fff;">
+                                    <lucide-icon [img]="PackageCheck" size="18" class="me-2"></lucide-icon>
+                                    Concretar Pedido
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+            </div><!-- /col-md-5 -->
+
+
+            <!--  Tabla de productos comprados  -->
+            <div class="col-md-6">
+                <br><br>
+                <h2 class="h3 mb-3 text-black">Productos comprados</h2>
+
+                <!-- Selector de items por página + contador -->
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <label class="mb-0 small">Mostrar</label>
+                    <select class="form-select form-select-sm" style="width: auto;"
+                            [(ngModel)]="itemsPorPagina"
+                            (ngModelChange)="onItemsPorPaginaChange()">
+                        <option [ngValue]="2">2</option>
+                        <option [ngValue]="5">5</option>
+                        <option [ngValue]="10">10</option>
+                        <option [ngValue]="20">20</option>
+                    </select>
+                    <label class="mb-0 small">por página</label>
+                    <span class="ms-auto small text-muted">
+                        {{ productos.length }} producto(s) — Página {{ paginaActual }} de {{ totalPaginas }}
+                    </span>
+                </div>
+
+                <div class="shopping-cart-wrapper row mb-5">
+                    <div class="profile-info-section">
+                        <div class="col-md-12">
+                            <div class="site-blocks-table table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID Compra</th>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th>Precio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let nw of productosPaginados">
+                                            <td>{{ nw.idCompra }}</td>
+                                            <td>{{ nw.nombreProducto }}</td>
+                                            <td>{{ nw.cantidad }}</td>
+                                            <td>{{ nw.precio | currency:'USD':'symbol':'1.2-2' }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Paginación -->
+                            <nav *ngIf="totalPaginas > 1" aria-label="Paginación de productos">
+                                <ul class="pagination justify-content-center mt-3">
+
+                                    <li class="page-item" [class.disabled]="paginaActual === 1">
+                                        <button class="page-link d-flex align-items-center gap-1"
+                                                (click)="irAPagina(paginaActual - 1)">
+                                            <lucide-icon [img]="ChevronLeft" size="14"></lucide-icon>
+                                            Anterior
+                                        </button>
+                                    </li>
+
+                                    <ng-container *ngFor="let p of paginas">
+                                        <li class="page-item" [class.active]="p === paginaActual"
+                                            *ngIf="p === 1 || p === totalPaginas || (p >= paginaActual - 2 && p <= paginaActual + 2)">
+                                            <button class="page-link" (click)="irAPagina(p)">{{ p }}</button>
+                                        </li>
+                                        <li class="page-item disabled"
+                                            *ngIf="(p === paginaActual - 3 && paginaActual - 3 > 1) || (p === paginaActual + 3 && paginaActual + 3 < totalPaginas)">
+                                            <span class="page-link">…</span>
+                                        </li>
+                                    </ng-container>
+
+                                    <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+                                        <button class="page-link d-flex align-items-center gap-1"
+                                                (click)="irAPagina(paginaActual + 1)">
+                                            Siguiente
+                                            <lucide-icon [img]="ChevronRight" size="14"></lucide-icon>
+                                        </button>
+                                    </li>
+
+                                </ul>
+                            </nav>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /col-md-6 -->
+
+        </div><!-- /row -->
+    </div>
+
+</body>
+
+</html>

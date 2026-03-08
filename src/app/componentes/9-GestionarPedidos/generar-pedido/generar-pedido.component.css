@@ -1,0 +1,274 @@
+ /* ── Modal overlay ─────────────────────────────────────────────────── */
+        .dir-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 25, 20, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1050;
+            animation: fadeIn .2s ease;
+        }
+
+        .dir-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .22);
+            max-width: 460px;
+            width: calc(100% - 2rem);
+            padding: 2rem 2rem 1.5rem;
+            animation: slideUp .25s cubic-bezier(.22, .68, 0, 1.2);
+        }
+
+        .dir-card .icon-wrap {
+            width: 48px;
+            height: 48px;
+            background: #eaf4ef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .dir-card .dir-address {
+            background: #f6faf8;
+            border-left: 3px solid #3b5d50;
+            border-radius: 4px;
+            padding: .6rem .9rem;
+            font-size: .9rem;
+            color: #2d4a3e;
+            margin: .75rem 0 1.25rem;
+            line-height: 1.6;
+        }
+
+        .dir-card .btn-si {
+            background: #3b5d50;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: .65rem 1.25rem;
+            font-size: .95rem;
+            flex: 1;
+            cursor: pointer;
+            transition: background .18s;
+        }
+
+        .dir-card .btn-si:hover {
+            background: #2d4a3e;
+        }
+
+        .dir-card .btn-no {
+            background: #fff;
+            color: #3b5d50;
+            border: 2px solid #3b5d50;
+            border-radius: 8px;
+            padding: .6rem 1.25rem;
+            font-size: .95rem;
+            flex: 1;
+            cursor: pointer;
+            transition: all .18s;
+        }
+
+        .dir-card .btn-no:hover {
+            background: #3b5d50;
+            color: #fff;
+        }
+
+        /* ── Botón "Cambiar dirección" flotante sobre el form ───────────────── */
+        .btn-cambiar-dir {
+            font-size: .82rem;
+            color: #3b5d50;
+            background: none;
+            border: 1px solid #b2d4c5;
+            border-radius: 20px;
+            padding: .25rem .75rem;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .btn-cambiar-dir:hover {
+            background: #eaf4ef;
+        }
+
+        /* ── Chip de estado ─────────────────────────────────────────────────── */
+        .dir-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            background: #eaf4ef;
+            border: 1px solid #b2d4c5;
+            border-radius: 20px;
+            padding: .3rem .8rem;
+            font-size: .82rem;
+            color: #2d4a3e;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+         /* ── Modal overlay ─────────────────────────────────────────────────── */
+        .dir-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 25, 20, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1050;
+            animation: fadeIn .2s ease;
+        }
+
+        .dir-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .22);
+            max-width: 460px;
+            width: calc(100% - 2rem);
+            padding: 2rem 2rem 1.5rem;
+            animation: slideUp .25s cubic-bezier(.22, .68, 0, 1.2);
+        }
+
+        .dir-card .icon-wrap {
+            width: 48px;
+            height: 48px;
+            background: #eaf4ef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .dir-card .dir-address {
+            background: #f6faf8;
+            border-left: 3px solid #3b5d50;
+            border-radius: 4px;
+            padding: .6rem .9rem;
+            font-size: .9rem;
+            color: #2d4a3e;
+            margin: .75rem 0 1.25rem;
+            line-height: 1.6;
+        }
+
+        .dir-card .btn-si {
+            background: #3b5d50;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: .65rem 1.25rem;
+            font-size: .95rem;
+            flex: 1;
+            cursor: pointer;
+            transition: background .18s;
+        }
+
+        .dir-card .btn-si:hover { background: #2d4a3e; }
+
+        .dir-card .btn-no {
+            background: #fff;
+            color: #3b5d50;
+            border: 2px solid #3b5d50;
+            border-radius: 8px;
+            padding: .6rem 1.25rem;
+            font-size: .95rem;
+            flex: 1;
+            cursor: pointer;
+            transition: all .18s;
+        }
+
+        .dir-card .btn-no:hover {
+            background: #3b5d50;
+            color: #fff;
+        }
+
+        /* ── Botón "Cambiar dirección" ──────────────────────────────────────── */
+        .btn-cambiar-dir {
+            font-size: .82rem;
+            color: #3b5d50;
+            background: none;
+            border: 1px solid #b2d4c5;
+            border-radius: 20px;
+            padding: .25rem .75rem;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .btn-cambiar-dir:hover { background: #eaf4ef; }
+
+        /* ── Chip de estado ─────────────────────────────────────────────────── */
+        .dir-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            background: #eaf4ef;
+            border: 1px solid #b2d4c5;
+            border-radius: 20px;
+            padding: .3rem .8rem;
+            font-size: .82rem;
+            color: #2d4a3e;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes fadeIn  { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+
+        /* ─── Paginación personalizada ─────────────────────────── */
+.pagination .page-link {
+  background-color: transparent;
+  border: 1px solid #2c2c2c;
+  color: #1a1a1a;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+  font-weight: 600;
+}
+
+.pagination .page-item.disabled .page-link {
+  background-color: transparent;
+  border-color: #ddd;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.pagination .page-item.active .page-link:focus,
+.pagination .page-link:focus {
+  box-shadow: 0 0 0 0.2rem rgba(26, 26, 26, 0.2);
+  outline: none;
+}

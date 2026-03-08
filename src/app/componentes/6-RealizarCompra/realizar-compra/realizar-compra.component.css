@@ -1,0 +1,256 @@
+.btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 15px 0; /* Remove horizontal padding */
+    text-align: center;
+    text-decoration: none;
+    display: block; /* Make it a block element */
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Span the full width */
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  /* General Styles */
+
+.shopping-cart-wrapper {
+  background-color: #fff; /* Light background for the cart section */
+  border-radius: 8px; /* Subtle rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  padding: 20px; /* Spacing around the cart content */
+}
+
+/* Table Styles */
+
+.site-blocks-table {
+  background-color: #f5f5f5; /* Light background for the table */
+  border-collapse: collapse; /* Remove default table borders */
+  width: 100%; /* Span the full width */
+}
+
+.table-striped tr:nth-child(odd) {
+  background-color: #e0e0e0; /* Alternate row shading */
+}
+
+
+/* Quantity Controls */
+
+
+.quantity-container {
+  display: flex; /* Make the container a flexbox */
+  justify-content: center; /* Center buttons horizontally */
+  align-items: center; /* Align buttons and input vertically */
+  width: 40px; /* Fixed width for quantity controls (adjust if needed) */
+  margin: 0 auto; /* Center the controls within the cell */
+}
+
+
+
+
+
+/* Cart Totals */
+
+.cart-totals {
+  display: flex; /* Arrange the totals in a row */
+  justify-content: space-between; /* Distribute space evenly */
+  align-items: center; /* Center items vertically */
+  margin-top: 20px; /* Spacing above the totals */
+}
+
+.cart-totals span {
+  font-weight: bold; /* Bold label for totals */
+}
+
+.paypal-button-wrapper {
+  text-align: center; /* Center the button horizontally */
+}
+
+.paypal-button {
+  border: none; /* Remove default button border */
+  outline: none; /* Remove default button outline */
+  cursor: pointer; /* Set cursor to pointer on hover */
+  background-color: #007bff; /* Transparent background for PayPal branding */
+  padding: 0; /* Remove default button padding */
+  height: 40px; /* Set the button height */
+  width: 200px; /* Set the button width (adjust if needed) */
+  color: #fff;
+  border: none;
+  padding: 15px 0; /* Remove horizontal padding */
+  text-align: center;
+  text-decoration: none;
+  display: block; /* Make it a block element */
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%; /* Span the full width */
+}
+
+
+.paypal-button:hover {
+  background-color: #0056b3;
+}
+/* Asegurar que el input tenga un ancho suficiente para mostrar el texto "MM/YY" */
+.input-group input[type="text"] {
+  width: calc(100% - 41px);
+}
+
+/* Estilo para mostrar un cursor de texto al pasar sobre el input */
+.input-group input[type="text"]:hover {
+  cursor: text;
+}
+  /* Add some styles for the payment form container */
+  .payment-form {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .payment-form h2 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .payment-form label {
+    font-weight: bold;
+  }
+
+  .payment-form .form-group {
+    margin-bottom: 10px;
+  }
+
+  /* Style the input fields */
+  .payment-form input[type="text"],
+  .payment-form input[type="number"] {
+    border: 1px solid #ccc;
+    padding: 5px;
+    width: 100%;
+  }
+
+  /* Style the payment button */
+  .payment-form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Style the shopping cart section */
+  .shopping-cart-wrapper {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+  }
+
+  .shopping-cart-wrapper table {
+    margin-bottom: 0;
+  }
+
+  .shopping-cart-wrapper th,
+  .shopping-cart-wrapper td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .shopping-cart-wrapper .cart-totals {
+    margin-top: 15px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+  }
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  input[type="text"],
+  input[type="date"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  input[type="text"]:focus,
+  input[type="date"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+  }
+  
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+  
+  .form-group.col-md-6 {
+    flex: 1 0 50%;
+    margin-right: 15px;
+  }
+  
+  .form-group.col-md-6:last-child {
+    margin-right: 0;
+  }
+  
+  .btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* ─── Paginación personalizada ─────────────────────────── */
+.pagination .page-link {
+  background-color: transparent;
+  border: 1px solid #2c2c2c;
+  color: #1a1a1a;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+  font-weight: 600;
+}
+
+.pagination .page-item.disabled .page-link {
+  background-color: transparent;
+  border-color: #ddd;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.pagination .page-item.active .page-link:focus,
+.pagination .page-link:focus {
+  box-shadow: 0 0 0 0.2rem rgba(26, 26, 26, 0.2);
+  outline: none;
+}

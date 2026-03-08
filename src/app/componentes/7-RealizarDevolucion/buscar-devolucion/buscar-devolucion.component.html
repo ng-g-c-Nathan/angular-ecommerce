@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+
+    <!-- Bootstrap CSS -->
+
+    <title>Devolución de Pedidos</title>
+</head>
+
+<body>
+
+    <!-- Start Header/Navigation -->
+    <div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h5 class="display-4 text-white" style="font-size: 1.5rem;">Gestionar reembolsos</h5>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <br>
+                <div class="mb-3">
+                    <label for="id-compra" class="form-label">ID de la solicitud:</label>
+                    <input type="text" class="form-control" id="id-compra" required>
+                </div>
+                <button type="button" class="btn btn-success">Buscar</button>
+                <div class="untree_co-section product-section before-footer-section">
+                    <h2>Productos comprados</h2>
+                    <br>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 col-md-4 col-lg-3 mb-5" *ngFor="let nw of Productos; let iControl=index" [@fadeIn]                            >
+                                <div class="product-item">
+                                    <img [src]="URL + '/assets/productos/Imagen' + nw.ID_Producto + '.png'"
+     class="img-fluid product-thumbnail">
+
+                                    <h3 class="product-title">{{ nw.Nombre}}</h3>
+                                    <strong class="product-price">{{nw.Precio}}</strong>
+                                    <br>
+                                    <button type="button" class="btn btn-success"
+                                        (click)="PasarACompras(nw.Nombre)">Devolver</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Formulario para la devolución -->
+                <form id="devolucion-form">
+                    <br>
+                    <div class="mb-3" style="overflow: auto; word-wrap: break-word;">
+                        <label for="id-compra" class="form-label">Producto comprado</label>
+                        <span id="id-compra" class="form-control"
+                            style="display: inline-block; font-size: 16px; height: auto; min-width: 150px;  min-height: 50px;">{{
+                            Texto }}</span>
+                    </div>
+
+
+
+
+
+                    <div class="mb-3">
+                        <label for="decision" class="form-label">Elige una opción:</label>
+                        <select class="form-select" id="decision" required>
+                            <option value="">Selecciona...</option>
+                            <option value="reembolso">Reembolso</option>
+                            <option value="devolucion">Devolución</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="motivo" class="form-label">Por qué:</label>
+                        <textarea class="form-control" id="motivo" rows="3" required></textarea>
+                    </div>
+
+                    <div id="metodo-pago" style="display: none;">
+                        <div class="mb-3">
+                            <label for="metodo" class="form-label">Método de pago:</label>
+                            <select class="form-select" id="metodo" required>
+                                <option value="">Selecciona...</option>
+                                <option value="tarjeta">Tarjeta de Crédito</option>
+                                <option value="paypal">PayPal</option>
+                            </select>
+                        </div>
+
+                        <div id="datos-tarjeta" style="display: none;">
+                            <div class="mb-3">
+                                <label for="nombre-titular" class="form-label">Nombre del Titular:</label>
+                                <input type="text" class="form-control" id="nombre-titular" required>
+                            </div>
+                        </div>
+
+                        <div id="datos-paypal" style="display: none;">
+                            <div class="mb-3">
+                                <label for="correo-paypal" class="form-label">Correo electrónico PayPal:</label>
+                                <input type="email" class="form-control" id="correo-paypal" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End Devolución Section -->
+
+    <!-- Start Estado de Devolución Section -->
+    <div id="estado-devolucion" style="display: none;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Estado de devolución</h5>
+                            <p class="card-text" id="estado"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+   
+</body>
+
+</html>

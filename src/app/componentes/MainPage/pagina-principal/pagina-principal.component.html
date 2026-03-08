@@ -1,0 +1,75 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrotech</title>
+</head>
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <br>
+            <br>
+            <h1 class="display-4">¡Bienvenido a Electrotech {{apodito}}!</h1>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-4 col-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="card-title">Productos</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Nuestra tienda de electrónica ofrece una amplia variedad de productos para todas tus
+                        necesidades. Desde smartphones hasta laptops, lo tenemos todo.
+                    </p>
+                    <a (click)="irHaciaCatalogo()" class="btn btn-primary">Ver Productos</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="card-title">Sobre Nuestra Universidad</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        La Universidad Autónoma de Tlaxcala ofrece 12 Doctorados, 4 Especialidades, 44 Licenciaturas y
+                        37 Maestrías, en 1 UAMs, 7 Centros de Investigación y 11 Facultades.
+                    </p>
+                    <a href="https://uatx.mx/" class="btn btn-primary">Conoce más</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="card-title">Sobre nosotros</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Aquí puedes conocer más sobre nuestra empresa, nuestra misión, visión y valores, así como
+                        nuestro equipo y nuestro compromiso con nuestros clientes.
+                    </p>
+                    <a (click)="irHaciaAboutUs()" class="btn btn-primary">Leer más</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="untree_co-section product-section before-footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-4 col-lg-3 mb-5" *ngFor="let nw of productos; let iControl=index" [@fadeIn]>
+                    <div class="product-item">
+                        <img [src]="URL + '/archivos/assets/productos/Imagen' + nw.id + '.gif'" class="img-fluid product-thumbnail" (click)="obtenerInformacionDelProducto(nw.id)">
+                        <h3 class="product-title">{{ nw.nombre}}</h3>
+                        <strong class="product-price">{{nw.precio}}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

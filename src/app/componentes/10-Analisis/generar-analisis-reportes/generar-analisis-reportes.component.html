@@ -1,0 +1,254 @@
+<!-- Start Hero Section -->
+<div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+    <div class="container">
+        <div class="row justify-content-between w-100 align-items-center">
+            <div class="col-lg-5 d-flex align-items-center gap-2">
+                <lucide-icon [img]="iconBarChart" size="22" color="white"></lucide-icon>
+                <h5 class="display-4 text-white mb-0" style="font-size: 1.5rem;">Análisis</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="untree_co-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center pt-5">
+
+                <div class="container">
+                    <div class="row">
+
+                        <!-- Gráfico de vistas -->
+                        <div class="col-md-6">
+                            <h2 class="display-4 mb-4 text-dark d-flex align-items-center justify-content-center gap-2">
+                                <lucide-icon [img]="iconEye" size="28"></lucide-icon>
+                                Vistas Totales de la página:
+                            </h2>
+                            <div class="chart-container" style="width: 100%; height: 400px;">
+                                <canvas id="myChart" width="400" height="400"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Resumen -->
+                        <div class="col-md-6">
+                            <div class="card bg-light p-4">
+                                <h2 class="display-4 mb-4 text-dark d-flex align-items-center gap-2">
+                                    <lucide-icon [img]="iconTrending" size="28"></lucide-icon>
+                                    Resumen
+                                </h2>
+                                <br>
+
+                                <div class="mb-4 d-flex align-items-start gap-2">
+                                    <lucide-icon [img]="iconPackage" size="20" class="mt-1"></lucide-icon>
+                                    <div>
+                                        <h3 class="text-dark">Total de productos:</h3>
+                                        <p class="font-size-18">{{ totalProductos }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4 d-flex align-items-start gap-2">
+                                    <lucide-icon [img]="iconStar" size="20" class="mt-1"></lucide-icon>
+                                    <div>
+                                        <h3 class="text-dark">Total de reseñas realizadas</h3>
+                                        <p class="font-size-18">{{ resenas }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4 d-flex align-items-start gap-2">
+                                    <lucide-icon [img]="iconCart" size="20" class="mt-1"></lucide-icon>
+                                    <div>
+                                        <h3 class="text-dark">Total de productos en carrito:</h3>
+                                        <p class="font-size-18">{{ carritos }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-start gap-2">
+                                    <lucide-icon [img]="iconList" size="20" class="mt-1"></lucide-icon>
+                                    <div>
+                                        <h3 class="text-dark">Total de productos en lista de deseos:</h3>
+                                        <p class="font-size-18">{{ listitas }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br><br><br>
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="row mb-5">
+                                <h5 class="display-5 mb-4 d-flex align-items-center gap-2">
+                                    <lucide-icon [img]="iconPackage" size="22"></lucide-icon>
+                                    <span class="text-dark">Proveedor con más productos</span>
+                                </h5>
+                                <div class="site-blocks-table">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th class="small">Nombre proveedor</th>
+                                                <th class="small">Total de productos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngIf="proveedorGrande">
+                                                <td>{{ proveedorGrande.nombreEmpresa }}</td>
+                                                <td>{{ proveedorGrande.totalProductos }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row mb-5">
+                                <h5 class="display-5 mb-4 d-flex align-items-center gap-2">
+                                    <lucide-icon [img]="iconCart" size="22"></lucide-icon>
+                                    <span class="text-dark">Producto más agregado al carrito</span>
+                                </h5>
+                                <div class="site-blocks-table">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th class="small">Nombre del producto</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ productoMasAgregado }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="display-5 mb-4 text-dark d-flex align-items-center justify-content-center gap-2">
+                        <lucide-icon [img]="iconBarChart" size="26"></lucide-icon>
+                        Ventas realizadas
+                    </h2>
+
+                    <div class="row justify-content-center g-3 mb-3">
+                        <div class="col-md-4">
+                            <label for="fechaInicio" class="form-label d-flex align-items-center gap-1">
+                                <lucide-icon [img]="iconCalendar" size="16"></lucide-icon>
+                                Fecha de inicio:
+                            </label>
+                            <input type="date" id="fechaInicio" name="fechaInicio" class="form-control" [(ngModel)]="fechaInicio">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fechaFin" class="form-label d-flex align-items-center gap-1">
+                                <lucide-icon [img]="iconCalendar" size="16"></lucide-icon>
+                                Fecha de fin:
+                            </label>
+                            <input type="date" id="fechaFin" name="fechaFin" class="form-control" [(ngModel)]="fechaFin">
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center gap-2 mb-3">
+                        <button (click)="actualizar()" class="btn btn-primary d-inline-flex align-items-center gap-2">
+                            <lucide-icon [img]="iconRefresh" size="16"></lucide-icon>
+                            Filtrar
+                        </button>
+                        <button (click)="limpiarFiltro()" class="btn btn-outline-secondary d-inline-flex align-items-center gap-2">
+                            Limpiar filtro
+                        </button>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="site-blocks-table">
+
+                    <!-- Selector de items por página -->
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <label class="mb-0 small">Mostrar</label>
+                            <select class="form-select form-select-sm" style="width: auto;"
+                                    [(ngModel)]="itemsPorPagina"
+                                    (ngModelChange)="onItemsPorPaginaChange()">
+                                <option *ngFor="let op of opcionesItemsPorPagina" [value]="op">{{ op }}</option>
+                            </select>
+                            <label class="mb-0 small">por página</label>
+                        </div>
+                        <small class="text-muted">
+                            {{ tipoBFiltrado.length }} resultado(s) — Página {{ paginaActual }} de {{ totalPaginas }}
+                        </small>
+                    </div>
+
+                    <table class="table table-sm table-hover">
+                        <thead class="">
+                            <tr>
+                                <th class="small">#</th>
+                                <th class="small">ID Pago</th>
+                                <th class="small">Cliente</th>
+                                <th class="small">Correo</th>
+                                <th class="small">Fecha de pago</th>
+                                <th class="small">Total</th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pago of paginaData; let i = index">
+                                <td class="small text-muted">{{ (paginaActual - 1) * itemsPorPagina + i + 1 }}</td>
+                                <td class="small">{{ pago.id }}</td>
+                                <td class="small">{{ pago.cliente?.nombre }}</td>
+                                <td class="small">{{ pago.cliente?.email }}</td>
+                                <td class="small">{{ pago.fechaPago | date:'dd/MM/yyyy' }}</td>
+                                <td class="small fw-bold">${{ pago.total | number:'1.2-2' }}</td>
+                            </tr>
+                            <tr *ngIf="paginaData.length === 0">
+                                <td colspan="6" class="text-center text-muted py-4">Sin resultados para el rango seleccionado.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Paginación -->
+                    <nav *ngIf="totalPaginas > 1" aria-label="Paginación de ventas">
+                        <ul class="pagination justify-content-center">
+
+                            <li class="page-item" [class.disabled]="paginaActual === 1">
+                                <button class="page-link d-flex align-items-center gap-1"
+                                        (click)="irAPagina(paginaActual - 1)">
+                                    <lucide-icon [img]="iconChevLeft" size="14"></lucide-icon>
+                                    Anterior
+                                </button>
+                            </li>
+
+                            <ng-container *ngFor="let p of paginas">
+                                <li class="page-item" [class.active]="p === paginaActual"
+                                    *ngIf="p === 1 || p === totalPaginas || (p >= paginaActual - 2 && p <= paginaActual + 2)">
+                                    <button class="page-link" (click)="irAPagina(p)">{{ p }}</button>
+                                </li>
+                                <li class="page-item disabled"
+                                    *ngIf="(p === paginaActual - 3 && paginaActual - 3 > 1) || (p === paginaActual + 3 && paginaActual + 3 < totalPaginas)">
+                                    <span class="page-link">…</span>
+                                </li>
+                            </ng-container>
+
+                            <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+                                <button class="page-link d-flex align-items-center gap-1"
+                                        (click)="irAPagina(paginaActual + 1)">
+                                    Siguiente
+                                    <lucide-icon [img]="iconChevRight" size="14"></lucide-icon>
+                                </button>
+                            </li>
+
+                        </ul>
+                    </nav>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

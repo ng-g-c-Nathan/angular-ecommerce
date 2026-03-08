@@ -1,0 +1,195 @@
+<div>
+
+  <!-- Navbar -->
+  <div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-lg-5">
+          <div class="intro-excerpt">
+            <h5 class="display-4 text-white" style="font-size: 1.5rem;">
+              Lista de deseos de {{ apodito }}
+            </h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido -->
+  <div class="untree_co-section before-footer-section">
+    <div class="container">
+
+      <div class="d-flex align-items-center gap-2 mb-3 mt-3">
+        <label class="mb-0 small">Mostrar</label>
+        <select class="form-select form-select-sm" style="width: auto;"
+                [(ngModel)]="itemsPorPagina"
+                (ngModelChange)="onItemsPorPaginaChange()">
+          <option [ngValue]="2">2</option>
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="20">20</option>
+        </select>
+        <label class="mb-0 small">por página</label>
+        <span class="ms-auto small text-muted">
+          {{ productos.length }} producto(s) — Página {{ paginaActual }} de {{ totalPaginas }}
+        </span>
+      </div>
+
+      <div class="row mb-5">
+        <form class="col-md-12">
+          <div class="site-blocks-table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="product-thumbnail">Foto del producto</th>
+                  <th class="product-name">Nombre</th>
+                  <th class="product-price">Precio</th>
+                  <th class="product-name">Descripción</th>
+                  <th class="product-quantity">Cantidad</th>
+                  <th class="product-total">Total</th>
+                  <th class="product-remove">Eliminar de la lista</th>
+                  <th class="product-remove">Pasar al carrito</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let producto of productosPaginados; let i = index">
+
+                  <!-- Foto -->
+                  <td class="product-thumbnail" data-th="Foto">
+                    <img [src]="URL + '/archivos/assets/productos/Imagen' + producto.id + '.gif'"
+                      class="img-fluid product-thumbnail" />
+                  </td>
+
+                  <!-- Nombre -->
+                  <td class="product-name" data-th="Nombre">{{ producto.nombre }}</td>
+
+                  <!-- Precio -->
+                  <td class="product-price" data-th="Precio">
+                    {{ producto.precio | currency:'USD':'symbol':'1.2-2' }}
+                  </td>
+
+                  <!-- Descripción -->
+                  <td class="product-name" data-th="Descripcion">
+                    <span style="cursor:pointer;"
+                      (click)="abrirModal(producto.descripcion, 'Descripción')">
+                      {{ producto.descripcion | slice:0:10 }}{{ producto.descripcion.length > 10 ? '...' : '' }}
+                    </span>
+                  </td>
+
+                  <!-- Cantidad -->
+                  <td class="product-quantity" data-th="Cantidad">
+                    <div class="input-group mb-3 d-flex align-items-center quantity-container"
+                      style="max-width: 120px;">
+                      <div class="input-group-prepend">
+                        <button class="btn btn-outline-black decrease" type="button"
+                          (click)="disminuirCantidad(producto, (paginaActual - 1) * itemsPorPagina + i)">&minus;</button>
+                      </div>
+                      <input type="text"
+                        class="form-control text-center quantity-amount"
+                        [formControl]="producto.form.get('cantidad')"
+                        (focus)="guardarValorAnterior($event)"
+                        (input)="onCantidadChange($event, producto, (paginaActual - 1) * itemsPorPagina + i)" />
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-black increase" type="button"
+                          (click)="aumentarCantidad(producto)">&plus;</button>
+                      </div>
+                    </div>
+                  </td>
+
+                  <!-- Total -->
+                  <td class="product-total" data-th="Total">
+                    {{ calcularTotal(producto) | currency:'USD':'symbol':'1.2-2' }}
+                  </td>
+
+                  <!-- Eliminar -->
+                  <td class="product-remove" data-th="Eliminar">
+                    <button class="btn btn-danger" type="button"
+                      (click)="borrarDeLaLista(producto.id, (paginaActual - 1) * itemsPorPagina + i)">
+                      <lucide-icon [img]="BookmarkX" size="22" color="black" />
+                    </button>
+                  </td>
+
+                  <!-- Pasar al carrito -->
+                  <td class="product-remove" data-th="Pasar al carrito">
+                    <button class="btn btn-danger" type="button"
+                      (click)="moverAlCarrito(producto.id, (paginaActual - 1) * itemsPorPagina + i)">
+                      <lucide-icon [img]="ShoppingCart" size="22" color="black" />
+                    </button>
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Paginación -->
+          <nav *ngIf="totalPaginas > 1" aria-label="Paginación de la lista">
+            <ul class="pagination justify-content-center mt-3">
+
+              <li class="page-item" [class.disabled]="paginaActual === 1">
+                <button class="page-link d-flex align-items-center gap-1"
+                        (click)="irAPagina(paginaActual - 1)">
+                  <lucide-icon [img]="ChevronLeft" size="14"></lucide-icon>
+                  Anterior
+                </button>
+              </li>
+
+              <ng-container *ngFor="let p of paginas">
+                <li class="page-item" [class.active]="p === paginaActual"
+                    *ngIf="p === 1 || p === totalPaginas || (p >= paginaActual - 2 && p <= paginaActual + 2)">
+                  <button class="page-link" (click)="irAPagina(p)">{{ p }}</button>
+                </li>
+                <li class="page-item disabled"
+                    *ngIf="(p === paginaActual - 3 && paginaActual - 3 > 1) || (p === paginaActual + 3 && paginaActual + 3 < totalPaginas)">
+                  <span class="page-link">…</span>
+                </li>
+              </ng-container>
+
+              <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+                <button class="page-link d-flex align-items-center gap-1"
+                        (click)="irAPagina(paginaActual + 1)">
+                  Siguiente
+                  <lucide-icon [img]="ChevronRight" size="14"></lucide-icon>
+                </button>
+              </li>
+
+            </ul>
+          </nav>
+
+        </form>
+      </div>
+
+      <p class="version">
+        Si alguno de sus productos previamente agregados no aparece, se debe a la falta de stock.
+      </p>
+
+      <!-- Total -->
+      <div class="row">
+        <div class="col-md-6 pl-5 ms-auto">
+          <div class="row justify-content-end">
+            <div class="col-md-7">
+
+              <div class="row">
+                <div class="col-md-12 text-right border-bottom mb-5">
+                  <h3 class="text-black h4 text-uppercase">Total de la lista de deseos</h3>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <span class="text-black">Total de la lista</span>
+                </div>
+                <div class="col-md-6 text-right">
+                  <strong class="text-black">{{ totalCarrito | currency }}</strong>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

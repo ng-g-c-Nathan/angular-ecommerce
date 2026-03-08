@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+</head>
+<body>
+
+
+    <!-- Start Header/Navigation -->
+    <div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark"
+         aria-label="Furni navigation bar">
+        <div class="container">
+            <div class="row justify-content-between align-items-center w-100">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt d-flex align-items-center gap-2">
+                        <!-- Ícono Lucide: bolsa de compras -->
+                        <lucide-icon [img]="iconoCompras" size="22" color="white" />
+                        <h5 class="display-4 text-white mb-0" style="font-size: 1.5rem;">
+                            Mis compras {{ Apodito }}
+                        </h5>
+                    </div>
+                </div>
+
+                <div class="col-auto d-flex gap-2">
+                    <!-- Botón Devolución -->
+                    <button class="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
+                            (click)="IrHaciaDevolucion()">
+                        <lucide-icon [img]="iconoDevolucion" size="16" />
+                        Devolución
+                    </button>
+
+                    <!-- Botón Login -->
+                    <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
+                            (click)="IrHaciaLogin()">
+                        <lucide-icon [img]="iconoLogin" size="16" />
+                        Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de productos -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="untree_co-section product-section before-footer-section">
+
+                    <!-- Estado vacío -->
+                    <div *ngIf="!Productos?.length" class="text-center py-5" [@fadeIn]>
+                        <lucide-icon [img]="iconoVacio" size="48" class="text-muted mb-3" />
+                        <p class="text-muted">No hay compras registradas aún.</p>
+                    </div>
+
+                    <!-- Grid de productos -->
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4 mb-4"
+                             *ngFor="let producto of Productos; let i = index"
+                             [@fadeIn]>
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <img [src]="URL + '/assets/productos/Imagen' + producto.idProducto + '.gif'"
+                                         class="img-fluid mb-3"
+                                         alt="Producto"
+                                         (click)="IrHaciaDevolucion()"
+                                         style="cursor: pointer;">
+
+                                    <div class="ticket-info">
+                                        <h5 class="mb-0">{{ producto.nombreProducto }}</h5>
+                                        <br>
+                                        <p class="mb-1">Precio Unitario: {{ producto.precio }}</p>
+                                        <p class="mb-1">Fecha de Compra: {{ producto.fechaPago }}</p>
+                                        <p class="mb-1">Forma de Pago: {{ producto.metodoPago }}</p>
+                                        <p class="mb-1">Cantidad: {{ producto.cantidad }}</p>
+                                        <hr class="my-2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="font-weight-bold">Precio Total:</span>
+                                            <span class="font-weight-bold">
+                                                $ {{ (producto.precio * producto.cantidad) | number:'1.2-2' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

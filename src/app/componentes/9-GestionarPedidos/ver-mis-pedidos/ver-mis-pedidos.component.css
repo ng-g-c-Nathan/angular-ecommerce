@@ -1,0 +1,6 @@
+.btn-small {
+    padding: 8px 12px; /* Adjust padding for desired size */
+    font-size: 14px; /* Adjust font size for smaller text */
+    line-height: 1; /* Ensure proper button height */
+    border-radius: 4px; /* Maintain rounded corners */
+}

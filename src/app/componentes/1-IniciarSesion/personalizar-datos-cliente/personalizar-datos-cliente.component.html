@@ -1,0 +1,293 @@
+<!-- ── Barra de título ───────────────────────────────────────────────────── -->
+<div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
+  <div class="container">
+    <div class="row justify-content-between w-100 align-items-center">
+      <div class="col-lg-5">
+        <div class="intro-excerpt d-flex align-items-center gap-2">
+          <lucide-icon [img]="iconUser" size="20" color="#ffffff" />
+          <h5 class="display-4 text-white mb-0" style="font-size: 1.5rem;">
+            Perfil de {{ Apodito }}
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="container">
+  <div class="row justify-content-between">
+
+    <!-- Datos personales-->
+    <div class="col-md-5">
+      <div class="profile-info-section">
+
+        <h2 class="h3 mb-3 text-black d-flex align-items-center gap-2">
+          <lucide-icon [img]="iconUser" size="20" />
+          Datos de {{ Apodito }}
+        </h2>
+
+        <form [formGroup]="FormularioDelCliente" (ngSubmit)="ActualizarDatosDelCliente()">
+          <div class="p-3 p-lg-5 border bg-white">
+
+            <div class="form-group row">
+
+              <div class="col-md-6">
+                <label for="c_fname" class="text-black">Nombre</label>
+                <input type="text" class="form-control" id="c_fname" formControlName="nombre" placeholder="Nombre">
+              </div>
+
+              <div class="col-md-6">
+                <label for="c_lname" class="text-black">Apellido paterno</label>
+                <input type="text" class="form-control" id="c_lname" formControlName="apellidoP"
+                  placeholder="Apellido Paterno">
+              </div>
+
+              <div class="col-md-6">
+                <label for="c_mname" class="text-black">Apellido materno</label>
+                <input type="text" class="form-control" id="c_mname" formControlName="apellidoM"
+                  placeholder="Apellido Materno">
+              </div>
+
+              <div class="col-md-6">
+                <label for="c_apodo" class="text-black">Apodo</label>
+                <input type="text" class="form-control" id="c_apodo" formControlName="apodo" placeholder="Apodo">
+              </div>
+             <div class="col-12 mb-2 mt-2">
+                <label for="c_rfc" class="text-black">RFC</label>
+                <input type="text" class="form-control" id="c_rfc" formControlName="rfc" placeholder="RFC"
+                  maxlength="13" style="text-transform: uppercase;">
+              </div>
+            </div>
+
+            <div class="form-group row">
+ 
+              <div class="col-12 mb-2 mt-2">
+                <span class="d-flex align-items-center gap-1 text-muted" style="font-size: 0.85rem;">
+                  <lucide-icon [img]="iconMapPin" size="14" />
+                  Dirección
+                </span>
+              </div>
+
+              <div class="col-md-12">
+                <label for="c_calle" class="text-black">Calle</label>
+                <input type="text" class="form-control" id="c_calle" formControlName="calle" placeholder="Calle">
+              </div>
+
+              <div class="col-md-6">
+                <label for="c_next" class="text-black">Número exterior</label>
+                <input type="text" class="form-control" id="c_next" formControlName="numeroExterior"
+                  placeholder="Número exterior">
+              </div>
+
+              <div class="col-md-6">
+                <label for="c_nint" class="text-black">Número interior</label>
+                <input type="text" class="form-control" id="c_nint" formControlName="numeroInterior"
+                  placeholder="Número interior">
+              </div>
+
+              <div class="col-md-6">
+                <label for="c_ciudad" class="text-black">Ciudad</label>
+                <input type="text" class="form-control" id="c_ciudad" formControlName="ciudad" placeholder="Ciudad">
+              </div>
+
+              <div class="col-md-6">
+                <label for="c_estado" class="text-black">Estado</label>
+                <select class="form-control" id="c_estado" formControlName="estado">
+                  <option value="" disabled>Selecciona un estado</option>
+                  <option value="Aguascalientes">Aguascalientes</option>
+                  <option value="Baja California">Baja California</option>
+                  <option value="Baja California Sur">Baja California Sur</option>
+                  <option value="Campeche">Campeche</option>
+                  <option value="Chiapas">Chiapas</option>
+                  <option value="Chihuahua">Chihuahua</option>
+                  <option value="Coahuila">Coahuila</option>
+                  <option value="Colima">Colima</option>
+                  <option value="Ciudad de México">Ciudad de México</option>
+                  <option value="Durango">Durango</option>
+                  <option value="Guanajuato">Guanajuato</option>
+                  <option value="Guerrero">Guerrero</option>
+                  <option value="Hidalgo">Hidalgo</option>
+                  <option value="Jalisco">Jalisco</option>
+                  <option value="México">México</option>
+                  <option value="Michoacán">Michoacán</option>
+                  <option value="Morelos">Morelos</option>
+                  <option value="Nayarit">Nayarit</option>
+                  <option value="Nuevo León">Nuevo León</option>
+                  <option value="Oaxaca">Oaxaca</option>
+                  <option value="Puebla">Puebla</option>
+                  <option value="Querétaro">Querétaro</option>
+                  <option value="Quintana Roo">Quintana Roo</option>
+                  <option value="San Luis Potosí">San Luis Potosí</option>
+                  <option value="Sinaloa">Sinaloa</option>
+                  <option value="Sonora">Sonora</option>
+                  <option value="Tabasco">Tabasco</option>
+                  <option value="Tamaulipas">Tamaulipas</option>
+                  <option value="Tlaxcala">Tlaxcala</option>
+                  <option value="Veracruz">Veracruz</option>
+                  <option value="Yucatán">Yucatán</option>
+                  <option value="Zacatecas">Zacatecas</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="c_cp" class="text-black">Código postal</label>
+                <input type="text" class="form-control" id="c_cp" formControlName="codigoPostal"
+                  placeholder="Código Postal">
+              </div>
+
+              <div class="col-md-6">
+                <label for="c_pais" class="text-black">País</label>
+                <input type="text" class="form-control" id="c_pais" formControlName="pais" placeholder="País">
+              </div>
+
+            </div>
+
+            <div class="form-group row mb-5">
+
+              <div class="col-12 mb-2 mt-2">
+                <span class="d-flex align-items-center gap-1 text-muted" style="font-size: 0.85rem;">
+                  <lucide-icon [img]="iconMail" size="14" />
+                  Contacto
+                </span>
+              </div>
+
+              <div class="col-md-12">
+                <label for="c_email" class="text-black">
+                  Correo electrónico <span class="text-danger">*</span>
+                </label>
+                <input type="email" class="form-control" id="c_email" formControlName="correoNuevo">
+                <p class="text-muted" style="font-size: 0.8em;">
+                  Si cambias el correo, tendrás que validarlo nuevamente.
+                </p>
+              </div>
+
+              <div class="col-md-12">
+                <label for="c_phone" class="text-black d-flex align-items-center gap-1">
+                  <lucide-icon [img]="iconPhone" size="14" />
+                  Teléfono
+                </label>
+                <input type="text" class="form-control" id="c_phone" formControlName="telefono" placeholder="Teléfono">
+              </div>
+
+              <div class="col-md-12">
+                <label for="c_extra" class="text-black">
+                  Instrucciones adicionales para envío
+                </label>
+                <input type="text" class="form-control" id="c_extra" formControlName="instruccionesExtras"
+                  placeholder="Instrucciones extras">
+              </div>
+
+            </div>
+
+            <div class="mt-3">
+              <p class="text-muted" style="font-size: 0.8em;">
+                Para cambiar la contraseña, solicítela desde la página de inicio de sesión.
+              </p>
+            </div>
+
+            <!-- Botón guardar -->
+            <div class="btn-group d-flex" role="group">
+              <button type="submit" class="btn btn-lg w-100 d-flex align-items-center justify-content-center gap-2"
+                style="background-color: #3b5d50; color: #fff;">
+                <lucide-icon [img]="iconSave" size="18" />
+                Actualizar Datos
+              </button>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <!--Foto de perfil-->
+    <div class="col-md-6">
+
+      <!--Foto actual -->
+      <div class="profile-picture-section">
+
+        <h2 class="h3 mb-3 text-black d-flex align-items-center gap-2">
+          <lucide-icon [img]="iconUser" size="20" />
+          Foto del usuario
+        </h2>
+
+        <div class="p-3 p-lg-5 border bg-white">
+          <div class="profile-picture">
+            <img [src]="imageUrl" alt="Foto de perfil" class="img-fluid product-thumbnail">
+          </div>
+          <br><br>
+
+          <button type="button"
+            class="btn btn-morado btn-lg w-100 d-flex align-items-center justify-content-center gap-2"
+            (click)="BorrarFoto()">
+            <lucide-icon [img]="iconTrash" size="18" />
+            Borrar Foto
+          </button>
+        </div>
+
+      </div>
+
+      <!--Subir foto-->
+      <div class="upload-picture-section">
+        <br>
+        <h2 class="h3 mb-3 text-black text-center d-flex align-items-center justify-content-center gap-2">
+          <lucide-icon [img]="iconUpload" size="20" />
+          Subir foto del usuario
+        </h2>
+
+        <div class="p-3 p-lg-5 border bg-white">
+          <div class="form-group">
+            <label for="customFile" class="text-black">Foto de usuario</label>
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="customFile" (change)="onFileSelected($event)"
+                accept=".png">
+              <br>
+              <label class="custom-file-label" for="customFile">
+                {{ selectedFileName || 'Seleccionar archivo...' }}
+              </label>
+            </div>
+            <br><br>
+
+            <button type="button"
+              class="btn btn-success btn-lg w-100 d-flex align-items-center justify-content-center gap-2"
+              (click)="onSubmit()">
+              <lucide-icon [img]="iconUpload" size="18" />
+              Cargar
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!--  Modal de confirmación-->
+<div *ngIf="MeAbro" class="confirm-overlay">
+  <div class="confirm-box">
+
+    <div class="d-flex align-items-center gap-2 mb-2">
+      <lucide-icon [img]="iconX" size="22" color="#dc3545" />
+      <h4 class="mb-0">Confirmación</h4>
+    </div>
+
+    <p>¿Estás seguro de que deseas continuar? Esta acción no se puede deshacer.</p>
+
+    <div class="button-group">
+      <button class="btn-yes d-flex align-items-center gap-1" (click)="SiModal()">
+        <lucide-icon [img]="iconCheck" size="16" />
+        Sí
+      </button>
+      <button class="btn-no d-flex align-items-center gap-1" (click)="NoModal()">
+        <lucide-icon [img]="iconX" size="16" />
+        No
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<br><br><br>

@@ -1,0 +1,96 @@
+<!-- Token válido: formulario de nueva contraseña -->
+<div *ngIf="PuedoEstarAqui">
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card card-small shadow-lg" style="width: 400px; border-radius: 15px; overflow: hidden;">
+
+      <div class="card-header text-center text-black" style="font-size: 1.2rem; padding: 1rem;">
+        <lucide-icon [img]="KeyRound" size="20" class="me-2"></lucide-icon>
+        Restablecer contraseña
+      </div>
+
+      <div class="card-body p-4">
+        <p class="mb-3 small text-muted text-center">
+          No abandone esta página, ya que el token para restablecer la contraseña se perderá.
+        </p>
+
+        <form [formGroup]="formularioDeCliente" (ngSubmit)="submit()">
+
+          <!-- Campo: Nueva contraseña -->
+          <div class="mb-4">
+            <label for="pass1" class="form-label">Nueva contraseña</label>
+            <div class="input-group">
+              <input
+                [type]="mostrarPass1 ? 'text' : 'password'"
+                class="form-control"
+                id="pass1"
+                placeholder="Escribe tu contraseña"
+                formControlName="pass1"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="togglePass1()"
+                tabindex="-1"
+                title="Mostrar/ocultar contraseña"
+              >
+                <lucide-icon [img]="mostrarPass1 ? EyeOff : Eye" size="16"></lucide-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Campo: Reescribir contraseña -->
+          <div class="mb-4">
+            <label for="pass2" class="form-label">Reescriba la contraseña</label>
+            <div class="input-group">
+              <input
+                [type]="mostrarPass2 ? 'text' : 'password'"
+                class="form-control"
+                id="pass2"
+                placeholder="Reescribe tu contraseña"
+                formControlName="pass2"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="togglePass2()"
+                tabindex="-1"
+                title="Mostrar/ocultar contraseña"
+              >
+                <lucide-icon [img]="mostrarPass2 ? EyeOff : Eye" size="16"></lucide-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Botón de envío -->
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success btn-lg">
+              Actualizar contraseña
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Token inválido o expirado -->
+<div *ngIf="!PuedoEstarAqui">
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card card-small shadow-lg" style="width: 400px; border-radius: 15px; overflow: hidden;">
+
+      <div class="card-header text-center bg-danger text-white" style="font-size: 1.2rem; padding: 1rem;">
+        <lucide-icon [img]="ShieldAlert" size="20" class="me-2"></lucide-icon>
+        <!--O_o-->
+      </div>
+
+      <div class="card-body p-4">
+        <p class="mb-0 text-center text-muted">
+          El token ha expirado, o se ha detectado un intento malintencionado.
+          Por favor, solicite un nuevo token para restablecer la contraseña.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card card-small">
+
+    <div class="card-header">
+      Restablecer contraseña
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="FormularioPass" (ngSubmit)="submit()">
+
+        <div class="mb-3">
+          <label for="emailInput" class="form-label">
+            Introduce un correo electrónico para restablecer tu contraseña.
+          </label>
+
+          <!-- Input con icono de email -->
+          <div class="input-group"
+               [class.is-invalid]="emailInvalido"
+               [class.is-valid]="emailValido">
+
+            <span class="input-group-text">
+              <lucide-icon [img]="MailIcon" size="16"></lucide-icon>
+            </span>
+
+            <input
+              type="email"
+              id="emailInput"
+              class="form-control form-control-sm"
+              [class.is-invalid]="emailInvalido"
+              [class.is-valid]="emailValido"
+              placeholder="Introduce tu correo electrónico."
+              formControlName="Email"
+              autocomplete="email"
+            />
+
+            <!-- Icono de error inline -->
+            @if (emailInvalido) {
+              <span class="input-group-text text-danger border-danger">
+                <lucide-icon [img]="AlertCircleIcon" size="16"></lucide-icon>
+              </span>
+            }
+
+            <!-- Icono de éxito inline -->
+            @if (emailValido) {
+              <span class="input-group-text text-success border-success">
+                <lucide-icon [img]="CheckCircleIcon" size="16"></lucide-icon>
+              </span>
+            }
+          </div>
+
+          <!-- Mensaje de validación -->
+          @if (emailInvalido) {
+            <div class="invalid-feedback d-block">
+              @if (emailControl.errors?.['required']) {
+                El correo electrónico es obligatorio.
+              } @else if (emailControl.errors?.['email']) {
+                Ingresa un formato de correo válido (ejemplo&#64;correo.com).
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Botón de envío con icono y estado de carga -->
+        <div class="btn-group d-flex" role="group">
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center gap-2"
+            [disabled]="cargando"
+          >
+            @if (cargando) {
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Enviando...
+            } @else {
+              <lucide-icon [img]="SendIcon" size="18"></lucide-icon>
+              Enviar
+            }
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

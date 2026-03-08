@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Mis devoluciones</title>
+
+</head>
+
+
+<!-- ── Navbar ── -->
+<div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt d-flex align-items-center gap-2">
+                    <lucide-icon [img]="RotateCcw" size="18" color="white" />
+                    <h5 class="display-4 text-white mb-0" style="font-size: 1.25rem; font-weight: 500;">
+                        Mis devoluciones
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+
+        <!-- ── Columna de productos ── -->
+        <div class="col-md-5">
+            <div class="untree_co-section product-section before-footer-section">
+                <br><br><br>
+
+                <!-- Disponibles -->
+                <div *ngIf="productosConDevolucion.length">
+                    <p class="section-heading">
+                        <lucide-icon [img]="CheckCircle" size="11" />
+                        Disponibles para devolver
+                    </p>
+                    <div class="product-list-stack">
+                        <div *ngFor="let producto of paginaConDevolucion"
+                             class="product-row product-item"
+                             (click)="EnviarSolicitud(
+                                 producto.nombreProducto,
+                                 producto.idTransaccion,
+                                 producto.idCompra,
+                                 producto.idProducto,
+                                 (producto.cantidad * producto.precio)
+                             )"
+                             [@fadeIn]>
+
+                            <img [src]="URL + '/archivos/assets/productos/Imagen' + producto.idProducto + '.gif'"
+                                 class="product-thumbnail"
+                                 [alt]="producto.nombreProducto">
+
+                            <div class="prod-meta">
+                                <h3 class="product-title">{{ producto.nombreProducto }}</h3>
+                                <span class="product-price">{{ producto.precio }}</span>
+                                <span class="product-status">
+                                    <lucide-icon [img]="CheckCircle" size="11" />
+                                    {{ producto.estadoPedido }}
+                                </span>
+                            </div>
+
+                            <div class="prod-action">
+                                <button type="button"
+                                        class="btn btn-primary btn-sm d-flex align-items-center gap-1"
+                                        (click)="$event.stopPropagation(); EnviarSolicitud(
+                                            producto.nombreProducto,
+                                            producto.idTransaccion,
+                                            producto.idCompra,
+                                            producto.idProducto,
+                                            (producto.cantidad * producto.precio)
+                                        )">
+                                    <lucide-icon [img]="RotateCcw" size="11" />
+                                    Solicitar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Paginación disponibles -->
+                    <div class="pagination-row" *ngIf="productosConDevolucion.length > itemsPorPagina">
+                        <button class="btn btn-primary btn-sm" (click)="paginaAnteriorCon()" [disabled]="paginaActualCon === 1">‹</button>
+                        <span class="page-info">{{ paginaActualCon }} / {{ totalPaginasCon }}</span>
+                        <button class="btn btn-primary btn-sm" (click)="paginaSiguienteCon()" [disabled]="paginaActualCon === totalPaginasCon">›</button>
+                    </div>
+                </div>
+
+                <hr *ngIf="productosConDevolucion.length && productosSinDevolucion.length"
+                    class="section-divider" />
+
+                <!-- No se pueden devolver -->
+                <div *ngIf="productosSinDevolucion.length">
+                    <p class="section-heading">
+                        <lucide-icon [img]="PackageSearch" size="11" />
+                        No se pueden devolver
+                    </p>
+                    <div class="product-list-stack">
+                        <div *ngFor="let producto of paginaSinDevolucion"
+                             class="product-row product-item gris"
+                             [@fadeIn]>
+
+                            <img [src]="URL + '/archivos/assets/productos/Imagen' + producto.idProducto + '.gif'"
+                                 class="product-thumbnail"
+                                 [alt]="producto.nombreProducto">
+
+                            <div class="prod-meta">
+                                <h3 class="product-title">{{ producto.nombreProducto }}</h3>
+                                <span class="product-price">{{ producto.precio }}</span>
+                            </div>
+
+                            <div class="prod-action">
+                                <span class="product-status">
+                                    <lucide-icon [img]="PackageSearch" size="11" />
+                                    En proceso
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Paginación no disponibles -->
+                    <div class="pagination-row" *ngIf="productosSinDevolucion.length > itemsPorPagina">
+                        <button class="btn btn-primary btn-sm" (click)="paginaAnteriorSin()" [disabled]="paginaActualSin === 1">‹</button>
+                        <span class="page-info">{{ paginaActualSin }} / {{ totalPaginasSin }}</span>
+                        <button class="btn btn-primary btn-sm" (click)="paginaSiguienteSin()" [disabled]="paginaActualSin === totalPaginasSin">›</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── Columna del formulario ── -->
+        <div class="col-md-5">
+            <br><br><br>
+
+            <div class="devolucion-form-card">
+                <form id="devolucion-form" [formGroup]="formularioDevolucion">
+
+                    <div class="mb-3">
+                        <label class="form-label d-flex align-items-center gap-1">
+                            <lucide-icon [img]="PackageSearch" size="13" />
+                            Producto seleccionado
+                        </label>
+                        <span class="producto-seleccionado">{{ Texto }}</span>
+                    </div>
+
+                    <div class="mb-3" *ngIf="Mostrar">
+                        <label for="motivo" class="form-label d-flex align-items-center gap-1">
+                            <lucide-icon [img]="AlertCircle" size="13" />
+                            Motivo de devolución
+                        </label>
+                        <textarea class="form-control"
+                                  id="motivo"
+                                  rows="3"
+                                  formControlName="razon"
+                                  placeholder="Describe brevemente el motivo..."
+                                  required>
+                        </textarea>
+                    </div>
+
+                    <button class="btn btn-primary btn-sm d-flex align-items-center gap-2"
+                            type="button"
+                            (click)="MostrarDatos()">
+                        <lucide-icon [img]="RotateCcw" size="13" />
+                        Enviar solicitud
+                    </button>
+
+                </form>
+
+                <p class="aviso-pie">
+                    <lucide-icon [img]="AlertCircle" size="12" style="flex-shrink:0; margin-top:1px;" />
+                    Para realizar una devolución, el pedido debe haber sido entregado previamente.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</html>

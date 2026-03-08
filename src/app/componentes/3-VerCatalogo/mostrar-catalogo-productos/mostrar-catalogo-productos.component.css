@@ -1,0 +1,242 @@
+mat-toolbar {
+    font-size: 14px;
+    /* Reduce el tamaño de la letra */
+}
+
+
+.search-container {
+    display: flex;
+    gap: 15px;
+    /* Adjust the value for desired spacing */
+    align-items: center;
+    /* Vertically align content if needed */
+}
+
+.search-input {
+    width: 175px;
+    /* Adjust the value for your preferred width */
+}/* Style for the entire navigation list */
+.mat-nav-list {
+    background-color: #f5f5f5; /* Light gray background */
+    padding: 16px; /* Add padding around the list items */
+    border-radius: 4px; /* Apply subtle rounded corners */
+  }
+  
+  /* Style for individual list items */
+  .mat-list-item {
+    display: flex; /* Arrange items in a row */
+    align-items: center; /* Vertically align items */
+    height: 48px; /* Set a consistent height for each item */
+    padding: 12px; /* Add padding between the icon and text */
+    text-decoration: none; /* Remove default list item underline */
+    cursor: pointer; /* Indicate interactivity on hover */
+    transition: background-color 0.2s ease-in-out; /* Smooth transition for background color change on hover */
+  }
+  
+  /* Style for list items on hover */
+  .mat-list-item:hover {
+    background-color: #e0e0e0; /* Slightly darker background on hover */
+  }
+  
+  /* Style for the list item icon */
+  .mat-list-item .mat-icon {
+    margin-right: 16px; /* Add space between the icon and text */
+    color: #666; /* Gray icon color */
+  }
+  
+  /* Style for the list item text */
+  .mat-list-item span {
+    font-size: 16px; /* Adjust font size as needed */
+    font-weight: 500; /* Slightly bolder font weight */
+    color: #333; /* Darker text color for better contrast */
+  }
+  .product-similitud {
+    font-size: 0.9rem; /* Tamaño más pequeño */
+    color: #000000; /* Color más suave */
+    font-weight: 600; /* Aumentar el grosor de la fuente */
+    margin-top: 10px;
+    text-transform: capitalize; /* Hacer que la primera letra sea mayúscula */
+}
+
+/* 1) Asegura que el toolbar ocupe todo el ancho y el overflow sea visible */
+mat-toolbar.custom-navbar {
+  width: 100%;
+  min-height: 56px;
+  overflow: visible !important;
+  z-index: 1200; /* encima de otros elementos si fuera necesario */
+}
+
+/* 2) Convierte la lista en flex para que se vea en línea */
+.custom-navbar-nav {
+  display: flex !important;
+  gap: 1.25rem; /* espacio entre items */
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 3) Asegura que los li no ocupen ancho extraño */
+.custom-navbar-nav li {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+/* 4) Quita márgenes extra del <p> dentro del link para que no baje la línea */
+.custom-navbar-nav .nav-link p {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+/* 5) Evita que .col-lg-5 empuje al resto (si no necesitas la columna, conviértela en auto) */
+.custom-navbar .col-lg-5 {
+  flex: 0 0 auto; /* no se expande */
+  width: auto;     /* no obliga ancho fijo */
+  padding-right: 1rem;
+}
+
+/* 6) que el contenedor del toolbar sea flex (centrado / separa título del nav) */
+.custom-navbar .container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* 7) forzar visibilidad en pantallas grandes si FxLayout oculta algo por error */
+[fxhide], .fx-hide, [fxHide] { /* no abuses, solo por si hay conflicto de atributos */
+  display: initial !important;
+}
+.product-price.old-price.fancy-strike {
+  position: relative;
+  display: inline-block;
+  color: #333;           /* asegúrate contraste con el fondo */
+  font-weight: 600;
+  font-size: 0.95em;
+  padding: 0 6px;
+  z-index: 1;            /* texto por encima */
+  background: transparent;
+}
+
+/* raya detrás */
+.product-price.old-price.fancy-strike::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: 52%;
+  height: 4px;
+  background: rgba(200,20,20,0.95);
+  transform: rotate(-6deg);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 0;            /* raya detrás del texto */
+}
+/* Container del toolbar: usa flex para alinear izquierda (logo), centro (nav) y derecha (search) */
+.custom-navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* empuja la search a la derecha */
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 1rem;
+}
+
+/* Marca / título "Catálogo" */
+.custom-navbar .intro-excerpt {
+  flex: 0 0 auto;
+  margin-right: 2.25rem; /* más espacio entre "Catálogo" y "Catálogo General" */
+}
+
+/* Lista de navegación: ocupa espacio central y mantiene separación entre items */
+.custom-navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;       /* espacio entre enlaces */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1 1 auto;    /* toma el espacio disponible para empujar la búsqueda a la derecha */
+  justify-content: flex-start; /* mantiene los links a la derecha del título */
+}
+
+/* Asegura que los <p> dentro de enlaces no hagan saltos ni margenes extra */
+.custom-navbar-nav li a p {
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Contenedor de búsqueda: no se encoge demasiado */
+.search-container {
+  flex: 0 0 auto;
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Formulario: control de ancho máximo para que no se salga en pantallas pequeñas */
+.rounded-form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 360px;    /* ajustar si quieres más/menos ancho del input */
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 6px;
+  background: transparent;
+}
+
+/* Input: permite que reduzca sin desbordar (min-width:0 importante para flexbox) */
+.search-input {
+  flex: 1 1 auto;
+  min-width: 0;               /* evita overflow en flex containers */
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px 0 0 6px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background:#ffffff; 
+  color: #fff; /* o lo que uses */
+  box-sizing: border-box;
+}
+
+/* Botón de búsqueda: tamaño fijo para no comprimir el icono */
+.rounded-form .btn {
+  flex: 0 0 48px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 6px 6px 0;
+  margin: 0;
+}
+
+/* Imagen del icono: no se salga */
+.rounded-form img {
+  display: block;
+  max-width: 24px;
+  max-height: 24px;
+}
+
+/* Ajustes estéticos en links para evitar saltos */
+.custom-navbar-nav li a {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgba(255,255,255,0.85);
+}
+
+/* Responsive: en pantallas pequeñas limitar el ancho del nav y mostrar el sidenav */
+@media (max-width: 991px) {
+  .custom-navbar .container {
+    padding: 0 0.5rem;
+  }
+  .custom-navbar-nav {
+    gap: 1rem;
+  }
+  .rounded-form { max-width: 260px; }
+}
+
+/* Small screens: si necesitas esconder la nav y usar el botón de menú, ya lo manejas con fxShow / fxHide */

@@ -1,0 +1,83 @@
+/* Paleta de colores Furni & Modernos */
+:host {
+  --furni-green: #3b5d50;
+  --furni-black: #2f2f2f;
+  --light-gray: #f8f9fa;
+}
+
+/* Animaciones */
+.animate-fade-in { animation: fadeIn 0.4s ease-out; }
+.animate-slide-down { animation: slideDown 0.3s ease-out; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Tabs Personalizados */
+.nav-custom-group {
+  background-color: #f0f0f0 !important;
+}
+
+.tab-btn {
+  border: none;
+  color: #6c757d;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  background-color: white !important;
+  color: var(--furni-black);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Tarjeta y Stripe */
+.card { border-radius: 1.25rem; }
+.action-stripe {
+  height: 6px;
+  width: 100%;
+}
+
+/* Inputs Estilizados */
+.form-floating > .form-control:focus {
+  border-color: var(--furni-green);
+  box-shadow: 0 0 0 0.25rem rgba(59, 93, 80, 0.15);
+}
+
+.icon-box {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.bg-success-light { background-color: rgba(25, 135, 84, 0.1); }
+
+/* Upload Area */
+.upload-area label {
+  transition: all 0.2s;
+  border-style: dashed !important;
+  border-width: 2px !important;
+}
+
+.upload-area label:hover {
+  background-color: #f1f3f5;
+  border-color: var(--furni-green) !important;
+}
+
+/* Botones */
+.btn-black {
+  background-color: var(--furni-black);
+  border-color: var(--furni-black);
+  color: white;
+}
+
+.btn-black:hover {
+  background-color: #000;
+  transform: translateY(-1px);
+}
+
+.hover-lift {
+  transition: transform 0.2s ease;
+}

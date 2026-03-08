@@ -1,0 +1,208 @@
+<ngx-sonner-toaster position="bottom-right" richColors />
+
+<div>
+  <mat-toolbar class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark"
+    arial-label="Furni navigation bar">
+    <mat-toolbar-row>
+
+      <!-- Botón hamburguesa (móvil) -->
+      <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
+        <lucide-icon [img]="iconMenu" size="22" color="white" />
+      </button>
+
+      <div class="container">
+        <a class="navbar-brand" (click)="IrHaciaHome()">Electrotech<span>.</span></a>
+      </div>
+
+      <span class="menu-spacer"></span>
+
+      <!-- Menú desktop -->
+      <div fxShow="true" fxHide.lt-md class="collapse navbar-collapse">
+        <div class="navbar-nav-container">
+          <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+            <li><a class="nav-link" (click)="IrHaciaCatalogo()" mat-button>Catálogo</a></li>
+            <li><a class="nav-link" (click)="IrHaciaAboutUs()"  mat-button>Sobre nosotros</a></li>
+          </ul>
+        </div>
+
+        <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+
+          <!-- Wishlist -->
+          <li *ngIf="HayCorreo">
+            <a class="nav-link" (click)="IrHaciaWishList()">
+              <lucide-icon [img]="iconHeart" size="22" color="white" />
+            </a>
+          </li>
+
+          <!-- Carrito -->
+          <li *ngIf="HayCorreo">
+            <a class="nav-link" (click)="IrHaciaCarrito()">
+              <lucide-icon [img]="iconCart" size="22" color="white" />
+            </a>
+          </li>
+
+          <!-- Pedidos -->
+          <li *ngIf="HayCorreo">
+            <div class="user-icon" (mouseover)="showDevoluciones = true">
+              <a class="nav-link">
+                <lucide-icon [img]="iconPackage" size="22" color="white" />
+              </a>
+              <div *ngIf="showDevoluciones"
+                   (mouseover)="showDevoluciones = true"
+                   (mouseleave)="showDevoluciones = false"
+                   class="user-options">
+                <a (click)="IrHaciaMisPedidos()">Ver mis pedidos</a>
+                <a (click)="IrHaciaTerminarPedidos()">Realizar Pedido</a>
+              </div>
+            </div>
+          </li>
+
+          <!-- Admin -->
+          <li *ngIf="isAdmin && HayCorreo">
+            <div class="user-icon" (mouseover)="showDevoluciones = true">
+              <a class="nav-link">
+                <lucide-icon [img]="iconAdmin" size="22" color="white" />
+              </a>
+              <div class="user-options"
+                   (mouseleave)="showDevoluciones = false">
+                <a (click)="IrHaciaAdmin()">Administrar Productos</a>
+                <a (click)="IrHaciaPedidos()">Manejo de pedidos <br>y devoluciones</a>
+                <a (click)="IrHaciaFacturas()">Autorizar <br> Facturas</a>
+                <a (click)="IrHaciaAnalisis()">Análisis</a>
+              </div>
+            </div>
+          </li>
+
+          <!-- Usuario -->
+          <li>
+            <div class="user-icon"
+                 (mouseover)="showUserOptions = true"
+                 (mouseleave)="showUserOptions = false">
+              <a class="nav-link">
+                <lucide-icon [img]="iconUser" size="22" color="white" />
+              </a>
+              <div *ngIf="showUserOptions" class="user-options">
+                <a *ngIf="!HayCorreo" (click)="IrHaciaLogin()">Iniciar sesión</a>
+                <a *ngIf="!HayCorreo" (click)="IrHaciaRegistrar()">Crear cuenta nueva</a>
+                <a *ngIf="HayCorreo"  (click)="IrHaciaMe()">Personalizar perfil</a>
+                <a *ngIf="HayCorreo"  (click)="IrHaciaHistorial()">Mi historial de compras</a>
+                <a *ngIf="HayCorreo"  (click)="IrHaciaDevolucion()">Solicitar una devolución</a>
+                <a *ngIf="HayCorreo"  (click)="IrHaciaMisFacturas()">Solicitar <br> Factura</a>
+                <a *ngIf="HayCorreo"  (click)="IrHaciaLogin()">Cerrar sesión</a>
+              </div>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <!-- Sidenav (móvil) -->
+  <mat-sidenav-container fxFlexFill>
+    <mat-sidenav #sidenav>
+      <mat-nav-list>
+        <a *ngIf="!HayCorreo" (click)="IrHaciaLogin()"    mat-list-item (click)="sidenav.toggle()">Iniciar sesión</a>
+        <a *ngIf="!HayCorreo" (click)="IrHaciaRegistrar()" mat-list-item (click)="sidenav.toggle()">Crear cuenta nueva</a>
+        <a *ngIf="HayCorreo"  (click)="IrHaciaMe()"        mat-list-item (click)="sidenav.toggle()">Personalizar perfil</a>
+        <a *ngIf="HayCorreo"  (click)="IrHaciaWishList()"  mat-list-item (click)="sidenav.toggle()">Mi lista de deseos</a>
+        <a *ngIf="HayCorreo"  (click)="IrHaciaCarrito()"   mat-list-item (click)="sidenav.toggle()">Mi carrito de compras</a>
+        <a *ngIf="HayCorreo"  (click)="IrHaciaTerminarPedidos()" mat-list-item (click)="sidenav.toggle()">Solicitar Pedido</a>
+        <a *ngIf="HayCorreo"  (click)="IrHaciaMisPedidos()"      mat-list-item (click)="sidenav.toggle()">Ver mis pedidos</a>
+        <a *ngIf="HayCorreo"  (click)="IrHaciaDevolucion()"      mat-list-item (click)="sidenav.toggle()">Solicitar una devolución</a>
+        <a                    (click)="IrHaciaCatalogo()"         mat-list-item (click)="sidenav.toggle()">Ver catálogo de productos</a>
+        <a *ngIf="HayCorreo"  (click)="IrHaciaHistorial()"       mat-list-item (click)="sidenav.toggle()">Mi historial de compras</a>
+        <a *ngIf="HayCorreo"  (click)="IrHaciaMisFacturas()"     mat-list-item (click)="sidenav.toggle()">Solicitar <br> Factura</a>
+        <a *ngIf="isAdmin"    (click)="IrHaciaAdmin()"            mat-list-item (click)="sidenav.toggle()">Administrar Productos</a>
+        <a *ngIf="isAdmin"    (click)="IrHaciaPedidos()"          mat-list-item (click)="sidenav.toggle()">Manejo de pedidos <br> y devoluciones</a>
+        <a *ngIf="isAdmin"    (click)="IrHaciaFacturas()"         mat-list-item (click)="sidenav.toggle()">Autorizar <br> Facturas</a>
+        <a *ngIf="isAdmin"    (click)="IrHaciaAnalisis()"         mat-list-item (click)="sidenav.toggle()">Análisis</a>
+        <a                    (click)="IrHaciaAboutUs()"           mat-list-item (click)="sidenav.toggle()">Sobre Nosotros</a>
+        <a *ngIf="HayCorreo"  (click)="IrHaciaLogin()"            mat-list-item (click)="sidenav.toggle()">Cerrar sesión</a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content fxFlexFill>
+
+      <!-- Con conexión -->
+      <router-outlet *ngIf="HayConexion" fxFlexFill>
+        <!-- Modal de motivo -->
+        <div *ngIf="Abrir" class="cuadrito-overlay">
+          <div class="cuadrito-content">
+            <span class="close" (click)="closeMotivoModal()" style="cursor:pointer;">
+              <lucide-icon [img]="iconClose" size="18" />
+            </span>
+            <h4>{{ selectedMotivo }}</h4>
+            <p>{{ Contenido }}</p>
+          </div>
+        </div>
+      </router-outlet>
+
+      <!-- Sin conexión -->
+      <div *ngIf="!HayConexion" fxFlexFill>
+        <div class="error-message">
+          <h1>Error</h1>
+          <p>No hay conexión con el servidor.
+            <br><br>Próximo reintento en {{ segundosRestantes }} segundos.
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="footer-section bg-dark text-white py-5" *ngIf="Footer && HayConexion">
+        <div class="container">
+          <div class="row mb-4">
+
+            <div class="col-lg-4">
+              <div class="mb-4">
+                <a (click)="IrHaciaHome()"
+                   class="footer-logo text-uppercase font-weight-bold text-white">
+                  Electrotech<span>.</span>
+                </a>
+              </div>
+              <p class="small">
+                Somos una empresa con más de 10 años de experiencia en la venta de productos electrónicos.
+                Nuestro objetivo es ofrecer productos de calidad al mejor precio, respaldados por un equipo
+                apasionado por la tecnología.
+              </p>
+            </div>
+
+            <div class="col-lg-4">
+              <h5 class="mb-3">Novedades</h5>
+              <p class="text-white-50">{{ Novedades }}</p>
+            </div>
+
+            <div class="col-lg-4">
+              <h5 class="mb-3">Contáctanos</h5>
+              <p class="text-white-50">electrotechuatx&#64;gmail.com</p>
+            </div>
+
+          </div>
+
+          <div class="border-top pt-3">
+            <div class="row">
+              <div class="col-lg-6 text-center text-lg-start mb-2 mb-lg-0">
+                <p class="mb-0 small">&copy;
+                  <script>document.write(new Date().getFullYear());</script>
+                  Electrotech. Todos los derechos reservados.
+                </p>
+              </div>
+              <div class="col-lg-6 text-center text-lg-end">
+                <ul class="list-inline">
+                  <li class="list-inline-item">
+                    <a (click)="IrHaciaAboutUs()" class="text-white-50">Sobre nosotros</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center mt-3">
+            <p class="mb-0 small text-white-50">Versión 2.80.0</p>
+          </div>
+        </div>
+      </footer>
+
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

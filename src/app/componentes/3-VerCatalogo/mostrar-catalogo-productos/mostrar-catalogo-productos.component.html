@@ -1,0 +1,206 @@
+<div>
+  <!-- Navbar -->
+  <mat-toolbar class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+    <mat-toolbar-row>
+
+      <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <div fxShow="true" fxHide.lt-md>
+        <div class="container">
+          <div class="collapse navbar-collapse">
+            <div class="col-lg-5">
+              <div class="intro-excerpt">
+                <h5 class="display-4 text-white" style="font-size: 1.5rem;">Catálogo</h5>
+              </div>
+            </div>
+
+            <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+              <li><a class="nav-link" (click)="catalogoNormal()"      style="text-decoration:none;cursor:pointer;"><p>Catálogo General</p></a></li>
+              <li><a class="nav-link" (click)="catalogoEspecial()"    style="text-decoration:none;cursor:pointer;"><p>Categorías</p></a></li>
+              <li><a class="nav-link" (click)="obtenerMasVendidos()"  style="text-decoration:none;cursor:pointer;"><p>Top Diez</p></a></li>
+              <li><a class="nav-link" (click)="obtenerMasCaros()"     style="text-decoration:none;cursor:pointer;"><p>Más Caros</p></a></li>
+              <li><a class="nav-link" (click)="obtenerMasBaratos()"   style="text-decoration:none;cursor:pointer;"><p>Más Baratos</p></a></li>
+            </ul>
+
+            <div class="search-container">
+              <div class="col-lg-5">
+                <form class="d-flex rounded-form" [formGroup]="formBusqueda" (ngSubmit)="buscarPorPalabra()">
+                  <input class="form-control me-2 search-input" type="search" placeholder="Buscar"
+                    aria-label="Search" formControlName="IDCOMMUN" />
+                  <button class="btn btn-outline-light" type="submit">
+                    <img src="./assets/search.svg" alt="Buscar" width="24" height="24" />
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <!-- Sidenav -->
+  <mat-sidenav-container fxFlexFill>
+    <mat-sidenav #sidenav>
+      <mat-nav-list>
+        <br />
+
+        <form class="d-flex rounded-form" [formGroup]="formBusqueda" (ngSubmit)="buscarPorPalabra()">
+          <input class="form-control me-2 search-input" type="search" placeholder="Buscar productos"
+            aria-label="Search" formControlName="IDCOMMUN" />
+          <button class="btn btn-outline-light" type="submit" (click)="sidenav.toggle()">
+            <img src="./assets/search.svg" alt="Buscar" width="20" height="20" />
+          </button>
+        </form>
+        <br />
+
+        <a class="nav-link" mat-list-item (click)="catalogoNormal();   sidenav.toggle()" style="text-decoration:none;cursor:pointer;"><p>Catálogo General</p></a>
+        <a class="nav-link" mat-list-item (click)="catalogoEspecial(); sidenav.toggle()" style="text-decoration:none;cursor:pointer;"><p>Categorías</p></a>
+        <a class="nav-link" mat-list-item (click)="obtenerMasVendidos();sidenav.toggle()" style="text-decoration:none;cursor:pointer;"><p>Top Diez</p></a>
+        <a class="nav-link" mat-list-item (click)="obtenerMasCaros();  sidenav.toggle()" style="text-decoration:none;cursor:pointer;"><p>Más Caros</p></a>
+        <a class="nav-link" mat-list-item (click)="obtenerMasBaratos();sidenav.toggle()" style="text-decoration:none;cursor:pointer;"><p>Más Baratos</p></a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content fxFlexFill>
+      <div class="untree_co-section before-footer-section">
+
+        <!-- Vista normal / filtros -->
+        <div class="container" *ngIf="!mostrarCategorias">
+
+          <!-- Catálogo normal -->
+          <div *ngIf="!busquedaConVSM">
+            <div class="untree_co-section product-section before-footer-section">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12 mb-5">
+                    <h2>{{ nombreAccion }}</h2>
+                    <div class="row">
+                      <div class="col-12 col-md-4 col-lg-3 mb-5 text-center pt-5"
+                        *ngFor="let nw of productos" [@fadeIn]>
+                        <div class="product-item">
+
+                          <img [src]="URL + '/archivos/assets/productos/Imagen' + nw.id + '.gif'"
+                            class="img-fluid product-thumbnail"
+                            (click)="verDetalleProducto(nw.id)" />
+
+                          <h3 class="product-title">{{ nw.nombre }}</h3>
+                          <br />
+
+                          <ng-container *ngIf="mostrarOfertas; else precioNormal">
+                            <strong class="product-price old-price">
+                              <del>{{ nw.precio | currency:'USD':'symbol':'1.2-2' }}</del>
+                            </strong>
+                            <br /><br />
+                            <strong class="product-price">{{ nw.precio | currency:'USD':'symbol':'1.2-2' }}</strong>
+                          </ng-container>
+                          <ng-template #precioNormal>
+                            <strong class="product-price">{{ nw.precio | currency:'USD':'symbol':'1.2-2' }}</strong>
+                          </ng-template>
+
+                          <br /><br />
+                          <button type="button" class="btn btn-primary"   (click)="agregarAlCarrito(nw.id)">
+                            <img src="./assets/cartVacio.svg" width="24" height="24" alt="Carrito" />
+                          </button>
+                          <button type="button" class="btn btn-success"   (click)="agregarAListaDeseos(nw.id)">
+                            <img src="./assets/heart.svg"     width="24" height="24" alt="Deseos" />
+                          </button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Búsqueda VSM -->
+          <div *ngIf="busquedaConVSM">
+            <div class="untree_co-section product-section before-footer-section">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12 mb-5">
+                    <h2>{{ nombreAccion }}</h2>
+                    <br />
+                    <div class="row">
+                      <div class="col-12 col-md-4 col-lg-3 mb-5 text-center pt-5"
+                        *ngFor="let nw of productosVSM" [@fadeIn]>
+                        <div class="product-item">
+
+                          <img [src]="URL+'/archivos/assets/productos/Imagen' + nw.idProducto + '.gif'"
+                            class="img-fluid product-thumbnail"
+                            (click)="verDetalleProducto(nw.idProducto)" />
+
+                          <h3 class="product-title">{{ nw.nombre }}</h3>
+                          <br />
+                          <strong class="product-price">{{ nw.precio | currency:'USD':'symbol':'1.2-2' }}</strong>
+                          <br /><br />
+                          <h4 class="product-similitud">Similitud de búsqueda</h4>
+                          <br />
+                          <strong>{{ nw.similitud | number:'1.0-2' }}%</strong>
+                          <br /><br />
+
+                          <button type="button" class="btn btn-primary" (click)="agregarAlCarrito(nw.idProducto)">
+                            <img src="./assets/cartVacio.svg" width="24" height="24" alt="Carrito" />
+                          </button>
+                          <button type="button" class="btn btn-success" (click)="agregarAListaDeseos(nw.idProducto)">
+                            <img src="./assets/heart.svg"     width="24" height="24" alt="Deseos" />
+                          </button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Vista por categorías -->
+        <div class="container" *ngIf="mostrarCategorias">
+          <div class="untree_co-section product-section before-footer-section">
+            <div class="container">
+              <div class="row">
+                <div class="col-12 mb-5" *ngFor="let categoria of categorias">
+                  <h2>{{ categoria }}</h2>
+                  <div class="row">
+                    <div class="col-12 col-md-4 col-lg-3 mb-5"
+                      *ngFor="let producto of productosPorCategoria[categoria]" [@fadeIn]>
+                      <div class="product-item">
+ 
+                        <img [src]="URL + '/archivos/assets/productos/Imagen' + producto.id + '.gif'"
+                          class="img-fluid product-thumbnail"
+                          (click)="verDetalleProducto(producto.id)" />
+
+                        <h3 class="product-title">{{ producto.nombre }}</h3>
+                        <br />
+                        <strong class="product-price">{{ producto.precio | currency:'USD':'symbol':'1.2-2' }}</strong>
+                        <br /><br />
+
+                        <button type="button" class="btn btn-primary" (click)="agregarAlCarrito(producto.id)">
+                          <img src="./assets/cartVacio.svg" width="24" height="24" alt="Carrito" />
+                        </button>
+                        <button type="button" class="btn btn-success" (click)="agregarAListaDeseos(producto.id)">
+                          <img src="./assets/ListaDeseos.png" width="24" height="24" alt="Deseos" />
+                        </button>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

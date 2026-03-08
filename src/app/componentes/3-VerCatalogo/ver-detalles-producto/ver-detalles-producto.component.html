@@ -1,0 +1,215 @@
+<div>
+
+  <!-- Navbar -->
+  <div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-lg-5" *ngIf="producto">
+          <div class="intro-excerpt">
+            <h5 class="display-4 text-white" style="font-size: 1.5rem;">{{ producto.categoria }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="container mt-5">
+    <div class="row justify-content-between">
+
+      <!-- detalle + reseña -->
+      <div class="col-lg-6">
+
+        <div class="mb-4" *ngIf="producto">
+          <div class="card border-0 shadow-sm rounded-lg" style="background: transparent;">
+            <div class="card-body p-4" style="background: transparent;">
+
+              <h2 class="card-title text-dark font-weight-bold" style="text-align: left;">
+                {{ producto.nombre }}
+              </h2>
+
+              <div class="text-center mb-4">
+                <img [src]="URL + '/archivos/assets/productos/Imagen' + producto.id + '.gif'"
+                  class="img-fluid rounded" style="max-width: 80%; margin-top: 15px;" />
+              </div>
+
+              <p class="card-text text-muted">{{ producto.descripcion }}</p>
+              <p class="card-text">
+                <strong>Categoría:</strong> {{ producto.categoria }}<br />
+                <strong>Proveedor:</strong> {{ producto.nombreEmpresa }}
+              </p>
+
+              <div class="mt-4 p-3 bg-light rounded d-flex justify-content-between align-items-center">
+                <h4 class="text-success font-weight-bold mb-0">
+                  Precio: {{ producto.precio | currency:'USD':'symbol':'1.2-2' }}
+                </h4>
+                <p class="text-dark font-weight-bold mb-0">Stock: {{ producto.stock }}</p>
+              </div>
+
+              <div class="d-flex justify-content-between mt-4">
+                <button class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2"
+                  (click)="agregarAListaDeseos()">
+                  <lucide-icon [img]="Heart" size="18" />
+                  <span>Agregar a la lista</span>
+                </button>
+                <button class="btn btn-primary btn-sm d-flex align-items-center gap-2"
+                  (click)="agregarAlCarrito()">
+                  <lucide-icon [img]="ShoppingCart" size="18" />
+                  <span>Agregar al carrito</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario de reseña -->
+        <div class="row mb-5" *ngIf="poderResenar">
+          <div class="col-md-12">
+            <form [formGroup]="formularioResena" (ngSubmit)="agregarResena()">
+
+              <div class="form-group">
+                <label class="text-black font-weight-bold">Tu Reseña</label>
+                <textarea
+                  cols="30" rows="5"
+                  class="form-control rounded"
+                  [class.is-invalid]="formularioResena.get('Comentario')!.invalid && formularioResena.get('Comentario')!.touched"
+                  placeholder="Escribe tu reseña aquí..."
+                  formControlName="Comentario">
+                </textarea>
+                <div class="invalid-feedback">
+                  <ng-container *ngIf="formularioResena.get('Comentario')!.hasError('required')">
+                    El comentario es obligatorio.
+                  </ng-container>
+                  <ng-container *ngIf="formularioResena.get('Comentario')!.hasError('maxlength')">
+                    Máximo 255 caracteres.
+                  </ng-container>
+                </div>
+              </div>
+
+              <div class="form-group mt-4">
+                <label class="text-black font-weight-bold">Calificación</label>
+                <select
+                  class="form-control rounded"
+                  [class.is-invalid]="formularioResena.get('Calificacion')!.invalid && formularioResena.get('Calificacion')!.touched"
+                  formControlName="Calificacion">
+                  <option value="">-- Selecciona --</option>
+                  <option value="1">1 - Muy Malo</option>
+                  <option value="2">2 - Malo</option>
+                  <option value="3">3 - Regular</option>
+                  <option value="4">4 - Bueno</option>
+                  <option value="5">5 - Excelente</option>
+                </select>
+                <div class="invalid-feedback">Selecciona una calificación.</div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block mt-4">Enviar Reseña</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Sin permiso de reseña -->
+        <div class="row mb-5" *ngIf="!poderResenar">
+          <div class="col-md-12">
+            <div class="card shadow-lg border-0">
+              <div class="card-body text-center">
+                <h5 class="card-title text-primary d-flex align-items-center justify-content-center gap-2">
+                  <lucide-icon [img]="AlertCircle" size="20" />
+                  ¡Aún no puedes dejar una reseña!
+                </h5>
+                <p class="card-text text-muted">
+                  Parece que aún no has comprado este producto.
+                  <strong>¡Compra ahora para dejar tu reseña!</strong>
+                </p>
+                <button class="btn btn-primary btn-sm" (click)="agregarAlCarrito()">Comprar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- relacionados + reseñas -->
+      <div class="col-lg-6">
+        <div class="row mb-5">
+          <div class="col-md-12">
+            <div class="untree_co-section product-section before-footer-section">
+              <div class="container">
+                <div class="row">
+
+                  <!-- Productos relacionados -->
+                  <h2 class="section-title">Productos Relacionados</h2>
+                  <div class="col-12 col-md-6 col-lg-3 mb-5"
+                    *ngFor="let nw of relacionados" [@fadeIn]>
+                    <div class="product-item" style="cursor:pointer;" (click)="navegarAProducto(nw.idProducto)">
+                      <img [src]="URL + '/archivos/assets/productos/Imagen' + nw.idProducto + '.gif'"
+                        class="small-image" />
+                      <h3 class="product-title">{{ nw.nombre }}</h3>
+                      <strong class="product-price">{{ nw.precio | currency:'USD':'symbol':'1.2-2' }}</strong>
+                    </div>
+                  </div>
+
+                  <!-- Reseñas -->
+                  <div class="row mb-5 mt-4" *ngIf="mostrarResenas">
+                    <div class="col-12">
+                      <h2 class="section-title text-center mb-4">Reseñas</h2>
+                    </div>
+                    <div class="col-12 mb-5">
+                      <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle shadow-sm">
+                          <thead class="table-dark">
+                            <tr>
+                              <th>Foto</th>
+                              <th>Cliente</th>
+                              <th>Comentario</th>
+                              <th>Calificación</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let r of resenas">
+
+                              <td>
+                                <img
+                                  [src]="URL + '/archivos/assets/users/User' + r.id + '.png'"
+                                  alt="Foto de {{ r.email }}"
+                                  class="img-thumbnail"
+                                  style="width:50px; height:50px;"
+                                  (error)="onImageError($event)" />
+                              </td>
+
+                              <td>
+                                <span [title]="r.email" style="cursor:pointer;"
+                                  (click)="r.email.length > 10 && abrirModal(r.email, 'Cliente')">
+                                  {{ r.email | slice:0:10 }}{{ r.email.length > 10 ? '...' : '' }}
+                                </span>
+                              </td>
+
+                              <td>
+                                <span [title]="r.comentario" style="cursor:pointer;"
+                                  (click)="r.comentario.length > 10 && abrirModal(r.comentario, 'Comentario')">
+                                  {{ r.comentario | slice:0:10 }}{{ r.comentario.length > 10 ? '...' : '' }}
+                                </span>
+                              </td>
+
+                              <td>
+                                <span class="badge bg-success fs-6">{{ r.calificacion }} / 5</span>
+                              </td>
+
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
