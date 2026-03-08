@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080',
+  apiUrl: '__API_URL__',
   fotosUrl: '__FOTOS_URL__',
   apiKey: '__API_KEY__',
   paypalClientId: '__PAYPAL_KEY__',
