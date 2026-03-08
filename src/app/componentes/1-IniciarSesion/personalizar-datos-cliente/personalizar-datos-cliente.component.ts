@@ -81,11 +81,6 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
   /** Subject para cancelar suscripciones activas al destruir el componente. */
   private readonly destroy$ = new Subject<void>();
 
-  /** Controla la visibilidad del modal de confirmacion de cambio de correo. */
-  MeAbro = false;
-
-  /** Funcion de resolucion de la promesa del modal activo. */
-  private modalResolver: ((value: number) => void) | null = null;
 
   /**
    * @param crudService   Servicio para operaciones con la API.
@@ -140,8 +135,8 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.userId  = usuario.id;
-    this.correo  = usuario.email;
+    this.userId = usuario.id;
+    this.correo = usuario.email;
     this.Apodito = usuario.apodo;
 
     this.cargarFotoUsuario(this.userId);
@@ -156,13 +151,13 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
     const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
 
     if (ext !== '.png') {
-      this.selectedFile     = undefined;
+      this.selectedFile = undefined;
       this.selectedFileName = undefined;
       toast.warning('Solo se permiten archivos .png');
       return;
     }
 
-    this.selectedFile     = file;
+    this.selectedFile = file;
     this.selectedFileName = file.name;
   }
 
@@ -178,7 +173,7 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: string) => {
           toast.success(response);
-          this.selectedFile     = undefined;
+          this.selectedFile = undefined;
           this.selectedFileName = undefined;
           this.cargarFotoUsuario(this.userId);
         },
@@ -196,7 +191,7 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
 
   /** Carga la foto de perfil del usuario desde el servidor y genera una URL de objeto temporal. */
   cargarFotoUsuario(id: number): void {
-    const carpeta       = 'users';
+    const carpeta = 'users';
     const nombreArchivo = `User${id}.png`;
 
     this.crudService.verArchivo(carpeta, nombreArchivo)
@@ -264,21 +259,21 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
   /** Mapea los datos recibidos del backend a los campos del formulario. */
   private actualizarFormulario(datos: any): void {
     this.FormularioDelCliente.patchValue({
-      nombre:             datos.nombre,
-      apellidoP:          datos.apellidoPaterno,
-      apellidoM:          datos.apellidoMaterno,
-      apodo:              datos.apodo,
-      rfc:                datos.rfc ?? '',
-      calle:              datos.calle,
-      numeroExterior:     datos.numeroExterior,
-      numeroInterior:     datos.numeroInterior,
-      ciudad:             datos.ciudad,
-      estado:             datos.estado,
-      codigoPostal:       datos.codigoPostal,
-      pais:               datos.pais,
+      nombre: datos.nombre,
+      apellidoP: datos.apellidoPaterno,
+      apellidoM: datos.apellidoMaterno,
+      apodo: datos.apodo,
+      rfc: datos.rfc ?? '',
+      calle: datos.calle,
+      numeroExterior: datos.numeroExterior,
+      numeroInterior: datos.numeroInterior,
+      ciudad: datos.ciudad,
+      estado: datos.estado,
+      codigoPostal: datos.codigoPostal,
+      pais: datos.pais,
       instruccionesExtras: datos.instruccionesExtras,
-      correoNuevo:        datos.email,
-      telefono:           datos.telefono
+      correoNuevo: datos.email,
+      telefono: datos.telefono
     });
 
     this.correo = datos.email;
@@ -307,21 +302,21 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
   private extraerValoresFormulario(): any {
     const f = this.FormularioDelCliente.value;
     return {
-      correo:              f.correoNuevo,
-      nombre:              f.nombre,
-      apellidoP:           f.apellidoP,
-      apellidoM:           f.apellidoM,
-      rfc:                 f.rfc,
-      apodo:               f.apodo,
-      calle:               f.calle,
-      numeroInterior:      f.numeroInterior,
-      ciudad:              f.ciudad,
-      numeroExterior:      f.numeroExterior,
-      telefono:            f.telefono,
+      correo: f.correoNuevo,
+      nombre: f.nombre,
+      apellidoP: f.apellidoP,
+      apellidoM: f.apellidoM,
+      rfc: f.rfc,
+      apodo: f.apodo,
+      calle: f.calle,
+      numeroInterior: f.numeroInterior,
+      ciudad: f.ciudad,
+      numeroExterior: f.numeroExterior,
+      telefono: f.telefono,
       instruccionesExtras: f.instruccionesExtras,
-      codigoPostal:        f.codigoPostal,
-      estado:              f.estado,
-      pais:                f.pais
+      codigoPostal: f.codigoPostal,
+      estado: f.estado,
+      pais: f.pais
     };
   }
 
@@ -330,10 +325,10 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
     const errores: string[] = [];
 
     const rx = {
-      email:        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      soloLetras:   /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/,
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      soloLetras: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/,
       alfanumerico: /^[a-zA-Z0-9]+$/,
-      numerico:     /^\d+$/
+      numerico: /^\d+$/
     };
 
     if (valores.rfc) {
@@ -396,11 +391,17 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
 
   /** Solicita confirmacion si el correo cambia y ejecuta la actualizacion en el backend. */
   private procesarActualizacionSegura(valores: any): void {
-    toast.success('Validacion de datos exitosa');
+    toast.success('Validación de datos exitosa.');
 
     if (this.correo !== valores.correo) {
-      this.openModal().then((resultado) => {
-        if (resultado === 1) this.ejecutarActualizacion();
+      toast.warning('¿Cambiar el correo electrónico?', {
+        description: 'Tendrás que validarlo nuevamente.',
+        duration: 10000,
+        action: {
+          label: 'Sí, cambiar',
+          onClick: () => this.ejecutarActualizacion()
+        },
+        cancel: { label: 'Cancelar', onClick: () => { } }
       });
     } else {
       this.ejecutarActualizacion();
@@ -421,25 +422,25 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
 
   /** Mapea los valores del formulario a una instancia de PersonaNueva para enviar al backend. */
   private construirPayload(): PersonaNueva {
-    const f       = this.FormularioDelCliente.value;
+    const f = this.FormularioDelCliente.value;
     const payload = new PersonaNueva();
 
-    payload.nombre              = f.nombre;
-    payload.apellidoP           = f.apellidoP;
-    payload.apellidoM           = f.apellidoM;
-    payload.apodo               = f.apodo;
-    payload.calle               = f.calle;
-    payload.numeroExterior      = f.numeroExterior;
-    payload.numeroInterior      = f.numeroInterior;
-    payload.ciudad              = f.ciudad;
-    payload.rfc                 = f.rfc;
-    payload.estado              = f.estado;
-    payload.codigoPostal        = f.codigoPostal;
-    payload.pais                = f.pais;
+    payload.nombre = f.nombre;
+    payload.apellidoP = f.apellidoP;
+    payload.apellidoM = f.apellidoM;
+    payload.apodo = f.apodo;
+    payload.calle = f.calle;
+    payload.numeroExterior = f.numeroExterior;
+    payload.numeroInterior = f.numeroInterior;
+    payload.ciudad = f.ciudad;
+    payload.rfc = f.rfc;
+    payload.estado = f.estado;
+    payload.codigoPostal = f.codigoPostal;
+    payload.pais = f.pais;
     payload.instruccionesExtras = f.instruccionesExtras;
-    payload.correo              = this.correo;
-    payload.correoNuevo         = f.correoNuevo;
-    payload.telefono            = f.telefono;
+    payload.correo = this.correo;
+    payload.correoNuevo = f.correoNuevo;
+    payload.telefono = f.telefono;
 
     return payload;
   }
@@ -454,23 +455,4 @@ export class PersonalizarDatosClienteComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** Abre el modal de confirmacion y retorna una promesa que resuelve con la decision del usuario. */
-  openModal(): Promise<number> {
-    this.MeAbro = true;
-    return new Promise((resolve) => { this.modalResolver = resolve; });
-  }
-
-  /** Confirma la accion del modal y resuelve la promesa con exito. */
-  SiModal(): void {
-    this.MeAbro = false;
-    this.modalResolver?.(1);
-    this.modalResolver = null;
-  }
-
-  /** Cancela la accion del modal y resuelve la promesa con rechazo. */
-  NoModal(): void {
-    this.MeAbro = false;
-    this.modalResolver?.(-1);
-    this.modalResolver = null;
-  }
 }

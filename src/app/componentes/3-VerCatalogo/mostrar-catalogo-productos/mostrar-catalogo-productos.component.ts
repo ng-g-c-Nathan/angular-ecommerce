@@ -163,7 +163,7 @@ export class MostrarCatalogoProductosComponent implements OnInit, OnDestroy {
     this.busquedaConVSM    = false;
     this.mostrarCategorias = false;
     this.mostrarOfertas    = false;
-    this.nombreAccion      = 'Catalogo general';
+    this.nombreAccion      = 'Catálogo general';
     this.verCatalogoNormal();
   }
 

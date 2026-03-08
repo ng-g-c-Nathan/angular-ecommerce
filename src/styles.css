@@ -1645,7 +1645,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     flex-wrap: nowrap !important; /* nunca envolver en varias filas */
   }
 
-  /* Opcional: personalizar flechas/paginación si se requiere */
 }
 
 .btns { display: flex; justify-content: center; gap: 0.5rem; }
+[data-sonner-toast][data-type="info"] {
+  background-color: #3b5d50 !important;
+  color: white !important;
+  border-color: #3b5d50 !important;
+}
+
+[data-sonner-toast][data-type="info"] [data-icon] svg {
+  color: white !important;
+}

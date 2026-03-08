@@ -32,13 +32,6 @@
                         <lucide-icon [img]="iconoDevolucion" size="16" />
                         Devolución
                     </button>
-
-                    <!-- Botón Login -->
-                    <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1"
-                            (click)="IrHaciaLogin()">
-                        <lucide-icon [img]="iconoLogin" size="16" />
-                        Login
-                    </button>
                 </div>
             </div>
         </div>
@@ -63,7 +56,7 @@
                              [@fadeIn]>
                             <div class="card h-100">
                                 <div class="card-body">
-                                    <img [src]="URL + '/ver/productos/Imagen' + producto.idProducto + '.gif'"
+                                    <img [src]="URL + '/archivos/ver/productos/Imagen' + producto.idProducto + '.gif'"
                                          class="img-fluid mb-3"
                                          alt="Producto"
                                          (click)="IrHaciaDevolucion()"

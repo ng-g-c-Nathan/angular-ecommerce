@@ -1,4 +1,3 @@
-<!-- ── Barra de título ───────────────────────────────────────────────────── -->
 <div class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
   <div class="container">
     <div class="row justify-content-between w-100 align-items-center">
@@ -264,30 +263,3 @@
 
   </div>
 </div>
-
-<!--  Modal de confirmación-->
-<div *ngIf="MeAbro" class="confirm-overlay">
-  <div class="confirm-box">
-
-    <div class="d-flex align-items-center gap-2 mb-2">
-      <lucide-icon [img]="iconX" size="22" color="#dc3545" />
-      <h4 class="mb-0">Confirmación</h4>
-    </div>
-
-    <p>¿Estás seguro de que deseas continuar? Esta acción no se puede deshacer.</p>
-
-    <div class="button-group">
-      <button class="btn-yes d-flex align-items-center gap-1" (click)="SiModal()">
-        <lucide-icon [img]="iconCheck" size="16" />
-        Sí
-      </button>
-      <button class="btn-no d-flex align-items-center gap-1" (click)="NoModal()">
-        <lucide-icon [img]="iconX" size="16" />
-        No
-      </button>
-    </div>
-
-  </div>
-</div>
-
-<br><br><br>

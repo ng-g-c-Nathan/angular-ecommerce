@@ -1,0 +1,61 @@
+.carrusel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.carrusel-track-container {
+  overflow: hidden;
+  flex: 1;
+}
+
+.carrusel-track {
+  display: flex;
+  gap: 16px;
+  transition: transform 0.4s ease;
+}
+
+.carrusel-item {
+  flex: 0 0 204px;   /* 220px - 16px gap */
+  width: 204px;
+}
+
+.carrusel-btn {
+  flex: 0 0 auto;
+  background: #3b5d50;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.carrusel-btn:hover:not(:disabled) {
+  background: #2e4a3e;
+}
+
+.carrusel-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.carrusel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ccc;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.carrusel-dot.active {
+  background: #3b5d50;
+}

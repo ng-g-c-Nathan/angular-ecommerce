@@ -16,7 +16,7 @@ import { environment } from '../../../../environments/environment';
     CommonModule,
   ],
   templateUrl: './pagina-principal.component.html',
-  styleUrl: '../../../../styles.css',
+  styleUrls: ['../../../../styles.css', './pagina-principal.component.css'],
   animations: [
     trigger('fadeIn', [
       transition(':enter', [
@@ -43,6 +43,22 @@ export class PaginaPrincipalComponent implements OnInit, OnDestroy {
   /** Lista de productos destacados mostrados en la pagina principal. */
   productos: any[] = [];
 
+  /** Indice actual del carrusel. */
+  carruselIndex = 0;
+
+  /** Numero de productos visibles a la vez en el carrusel. */
+  readonly carruselVisible = 4;
+
+  /** Ancho en px de cada item del carrusel. */
+  readonly carruselItemWidth = 220;
+
+  /** Timer del auto-giro del carrusel. */
+  private carruselTimer: any;
+
+  /** Indica si el mouse está sobre el carrusel (pausa el auto-giro). */
+  carruselPausado = false;
+
+
   /** Subject para cancelar suscripciones activas al destruir el componente. */
   private readonly destroy$ = new Subject<void>();
 
@@ -52,26 +68,21 @@ export class PaginaPrincipalComponent implements OnInit, OnDestroy {
    * @param globalService Servicio de estado global de sesion del usuario.
    */
   constructor(
-    private readonly crudService:   CrudService,
-    private readonly router:        Router,
+    private readonly crudService: CrudService,
+    private readonly router: Router,
     private readonly globalService: GlobalService,
-  ) {}
+  ) { }
 
   /** Carga los datos del usuario, los productos iniciales y activa el refresco automatico cada 7 segundos. */
   ngOnInit(): void {
     this.revisarUsuario();
     this.cargarProductos();
-    interval(7000).pipe(
-      switchMap(() => this.crudService.PaginaDeInicio()),
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next:  (respuesta: any) => { this.productos = respuesta; },
-      error: () => {}
-    });
+    this.iniciarAutoGiro();
   }
 
   /** Cancela todas las suscripciones activas para evitar memory leaks. */
   ngOnDestroy(): void {
+    clearInterval(this.carruselTimer);
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -80,24 +91,60 @@ export class PaginaPrincipalComponent implements OnInit, OnDestroy {
   private revisarUsuario(): void {
     const usuario = this.globalService.getUsuario();
     if (!usuario) {
-      this.correo  = '';
+      this.correo = '';
       this.apodito = undefined;
       return;
     }
-    this.correo  = usuario.email;
+    this.correo = usuario.email;
     this.apodito = usuario.apodo;
   }
 
   /** Consulta los productos destacados desde el backend y actualiza la lista de la pagina principal. */
   cargarProductos(): void {
-    this.crudService.PaginaDeInicio()
+    this.crudService.ObtenerProductos()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next:  (respuesta: any) => { this.productos = respuesta; },
-        error: () => {}
+        next: (respuesta: any) => { this.productos = respuesta; },
+        error: () => { }
       });
   }
 
+
+  /** Indice maximo al que puede llegar el carrusel sin quedar con espacios vacios. */
+  get maxCarruselIndex(): number {
+    return Math.max(0, this.productos.length - this.carruselVisible);
+  }
+
+  /** Array usado para renderizar los puntos indicadores del carrusel. */
+  get carruselDots(): number[] {
+    return Array.from({ length: this.maxCarruselIndex + 1 }, (_, i) => i);
+  }
+
+  /** Avanza el carrusel una posicion hacia la derecha. */
+  carruselSiguiente(): void {
+    if (this.carruselIndex < this.maxCarruselIndex) {
+      this.carruselIndex++;
+    }
+  }
+
+  /** Retrocede el carrusel una posicion hacia la izquierda. */
+  carruselAnterior(): void {
+    if (this.carruselIndex > 0) {
+      this.carruselIndex--;
+    }
+  }
+
+  /** Inicia el auto-giro del carrusel cada 3 segundos. */
+  private iniciarAutoGiro(): void {
+    this.carruselTimer = setInterval(() => {
+      if (this.carruselPausado || this.productos.length === 0) return;
+      if (this.carruselIndex < this.maxCarruselIndex) {
+        this.carruselIndex++;
+      } else {
+        this.carruselIndex = 0;
+      }
+    }, 3000);
+  }
   /** Redirige al usuario hacia el catalogo de productos. */
   irHaciaCatalogo(): void {
     this.router.navigate(['Catalogo']);
