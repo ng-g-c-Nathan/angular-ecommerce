@@ -84,7 +84,7 @@
                         *ngFor="let nw of productos" [@fadeIn]>
                         <div class="product-item">
 
-                          <img [src]="URL + '/archivos/assets/productos/Imagen' + nw.id + '.gif'"
+                          <img [src]="URL + '/archivos/ver/productos/Imagen' + nw.id + '.gif'"
                             class="img-fluid product-thumbnail"
                             (click)="verDetalleProducto(nw.id)" />
 
@@ -132,7 +132,7 @@
                         *ngFor="let nw of productosVSM" [@fadeIn]>
                         <div class="product-item">
 
-                          <img [src]="URL+'/archivos/assets/productos/Imagen' + nw.idProducto + '.gif'"
+                          <img [src]="URL+'/archivos/ver/productos/Imagen' + nw.idProducto + '.gif'"
                             class="img-fluid product-thumbnail"
                             (click)="verDetalleProducto(nw.idProducto)" />
 
@@ -175,7 +175,7 @@
                       *ngFor="let producto of productosPorCategoria[categoria]" [@fadeIn]>
                       <div class="product-item">
  
-                        <img [src]="URL + '/archivos/assets/productos/Imagen' + producto.id + '.gif'"
+                        <img [src]="URL + '/archivos/ver/productos/Imagen' + producto.id + '.gif'"
                           class="img-fluid product-thumbnail"
                           (click)="verDetalleProducto(producto.id)" />
 

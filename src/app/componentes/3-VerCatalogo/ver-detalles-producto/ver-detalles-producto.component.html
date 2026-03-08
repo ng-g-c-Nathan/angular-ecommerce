@@ -29,7 +29,7 @@
               </h2>
 
               <div class="text-center mb-4">
-                <img [src]="URL + '/archivos/assets/productos/Imagen' + producto.id + '.gif'"
+                <img [src]="URL + '/archivos/ver/productos/Imagen' + producto.id + '.gif'"
                   class="img-fluid rounded" style="max-width: 80%; margin-top: 15px;" />
               </div>
 
@@ -142,7 +142,7 @@
                   <div class="col-12 col-md-6 col-lg-3 mb-5"
                     *ngFor="let nw of relacionados" [@fadeIn]>
                     <div class="product-item" style="cursor:pointer;" (click)="navegarAProducto(nw.idProducto)">
-                      <img [src]="URL + '/archivos/assets/productos/Imagen' + nw.idProducto + '.gif'"
+                      <img [src]="URL + '/archivos/ver/productos/Imagen' + nw.idProducto + '.gif'"
                         class="small-image" />
                       <h3 class="product-title">{{ nw.nombre }}</h3>
                       <strong class="product-price">{{ nw.precio | currency:'USD':'symbol':'1.2-2' }}</strong>
@@ -170,7 +170,7 @@
 
                               <td>
                                 <img
-                                  [src]="URL + '/archivos/assets/users/User' + r.id + '.png'"
+                                  [src]="URL + '/archivos/ver/users/User' + r.id + '.png'"
                                   alt="Foto de {{ r.email }}"
                                   class="img-thumbnail"
                                   style="width:50px; height:50px;"
