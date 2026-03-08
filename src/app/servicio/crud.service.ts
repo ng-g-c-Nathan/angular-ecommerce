@@ -278,8 +278,11 @@ export class CrudService {
   }
 
   /** Reset password en modo demo */
+  /** Reset password en modo demo */
   resetPasswordDemo(email: string): Observable<any> {
-    return this.post(this.API + '/demo/reset-password?email=' + email, {});
+    return this.post(this.API + '/clientes/demo/reset-password?email=' + email, {}, {
+      responseType: 'text'
+    });
   }
 
   /** Actualiza la contraseña. */

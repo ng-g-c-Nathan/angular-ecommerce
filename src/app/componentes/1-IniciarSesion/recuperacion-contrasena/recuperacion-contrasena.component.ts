@@ -108,44 +108,43 @@ export class RecuperacionContrasenaComponent implements OnInit, OnDestroy {
     const email = this.FormularioPass.value.Email;
     this.cargando = true;
 
-    if (environment.demo === 'SI') {
-      const loadingToast = toast.loading('Verificando correo...', {
-        description: 'Estamos comprobando si el correo esta registrado.'
-      });
-
-      this.crudService.ExisteCorreo(email).pipe(
-        takeUntil(this.destroy$)
-      ).subscribe({
-        next: (response: any) => {
-          toast.dismiss(loadingToast);
-
-          if (response.success === 1) {
-            toast.info('Modo demo activo', {
-              description: 'No se envía correo. Tu contraseña ha sido restablecida a: 12345678'
-            });
-          } else {
-            toast.error('Usuario no encontrado', {
-              description: 'No existe ninguna cuenta con ese correo.'
-            });
-          }
-
-          this.cargando = false;
-        },
-        error: () => {
-          toast.dismiss(loadingToast);
-          toast.error('Error de conexion', {
-            description: 'No pudimos conectar con el servidor.'
-          });
-          this.cargando = false;
-        }
-      });
-
-      return;
-    }
-
     const loadingToast = toast.loading('Verificando correo...', {
       description: 'Estamos comprobando si el correo esta registrado.'
     });
+
+    if (environment.demo === 'SI') {
+      this.crudService.ExisteCorreo(email).pipe(
+        switchMap((response: any) => {
+          if (response.success !== 1) {
+            return throwError(() => ({ tipo: 'not_found' }));
+          }
+          return this.crudService.resetPasswordDemo(email);
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe({
+        next: () => {
+          toast.dismiss(loadingToast);
+          toast.info('Modo demo activo', {
+            description: 'No se envía correo. Tu contraseña ha sido restablecida a: 12345678'
+          });
+          this.cargando = false;
+        },
+        error: (err) => {
+          toast.dismiss(loadingToast);
+          if (err?.tipo === 'not_found') {
+            toast.error('Usuario no encontrado', {
+              description: 'No existe ninguna cuenta con ese correo.'
+            });
+          } else {
+            toast.error('Error de conexion', {
+              description: 'No pudimos conectar con el servidor.'
+            });
+          }
+          this.cargando = false;
+        }
+      });
+      return;
+    }
 
     this.crudService.ExisteCorreo(email).pipe(
       switchMap((response: any) => {
@@ -158,7 +157,6 @@ export class RecuperacionContrasenaComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: (response: any) => {
         toast.dismiss(loadingToast);
-
         if (response.success === 1) {
           toast.success('Correo enviado!', {
             description: 'Revisa tu bandeja de entrada.'
@@ -168,12 +166,10 @@ export class RecuperacionContrasenaComponent implements OnInit, OnDestroy {
             description: 'El servidor no pudo procesar la solicitud.'
           });
         }
-
         this.cargando = false;
       },
       error: (err) => {
         toast.dismiss(loadingToast);
-
         if (err?.tipo === 'not_found') {
           toast.error('Usuario no encontrado', {
             description: 'No existe ninguna cuenta con ese correo.'
@@ -183,7 +179,6 @@ export class RecuperacionContrasenaComponent implements OnInit, OnDestroy {
             description: 'No pudimos conectar con el servidor.'
           });
         }
-
         this.cargando = false;
       }
     });
