@@ -16,9 +16,9 @@ files.forEach(file => {
     content = content.replace(/__API_URL__/g, process.env.API_URL || '');
     content = content.replace(/__API_KEY__/g, process.env.API_KEY || '');
     content = content.replace(/__DEMO__/g, process.env.DEMO || '');
-    content = content.replace(/__FOTOS_URL__'/g, process.env.FOTOS_URL || '');
+    content = content.replace(/__FOTOS_URL__/g, process.env.FOTOS_URL || '');
     content = content.replace(/__PAYPAL_KEY__/g, process.env.PAYPAL_KEY || '');
-
+//
     fs.writeFileSync(filePath, content);
     console.log(`Procesado: ${file}`);
 });
