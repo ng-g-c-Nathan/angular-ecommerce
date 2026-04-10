@@ -90,7 +90,7 @@
                     <div class="carrusel-item" *ngFor="let nw of productos" [@fadeIn]>
                         <div class="product-item text-center" (click)="obtenerInformacionDelProducto(nw.id)"
                             style="cursor:pointer;">
-                            <img [src]="URL + '/archivos/ver/productos/Imagen' + nw.id + '.gif'"
+                            <img [src]="URL + '/productos/Imagen' + nw.id + '.gif'"
                                 class="img-fluid product-thumbnail mb-2"
                                 style="max-height:160px; object-fit:contain;" />
                             <h3 class="product-title" style="font-size:0.95rem;">{{ nw.nombre }}</h3>
