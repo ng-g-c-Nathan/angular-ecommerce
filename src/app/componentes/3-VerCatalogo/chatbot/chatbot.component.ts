@@ -67,7 +67,6 @@ export class ChatbotComponent  implements AfterViewChecked {
         this.cargando.set(false);
       },
       error: (error) => {
-        console.log(error)
         this.mensajes.push({
           texto: 'Ups, tuve un problema al responder. Intenta de nuevo 😅',
           esUsuario: false,
