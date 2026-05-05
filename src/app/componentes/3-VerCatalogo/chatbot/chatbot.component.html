@@ -1,0 +1,62 @@
+<!-- Botón flotante -->
+<button class="chat-fab" (click)="toggleChat()" [class.abierto]="abierto()">
+  <span class="fab-icon">{{ abierto() ? '✕' : '💬' }}</span>
+  <span class="fab-badge" *ngIf="!abierto()">1</span>
+</button>
+
+<!-- Ventana del chat -->
+<div class="chat-ventana" [class.visible]="abierto()">
+
+  <!-- Header -->
+  <div class="chat-header">
+    <div class="chat-avatar">🤖</div>
+    <div class="chat-info">
+      <span class="chat-nombre">Asistente Tiendita</span>
+      <span class="chat-estado">
+        <span class="punto-verde"></span> En línea
+      </span>
+    </div>
+    <button class="chat-limpiar" (click)="limpiarChat()" title="Reiniciar conversación">🗑️</button>
+    <button class="chat-cerrar" (click)="toggleChat()">✕</button>
+  </div>
+
+  <!-- Mensajes -->
+  <div class="chat-mensajes" #mensajesContenedor>
+    <div
+      *ngFor="let m of mensajes"
+      class="burbuja-wrap"
+      [class.usuario]="m.esUsuario"
+    >
+      <div class="burbuja" [class.burbuja-usuario]="m.esUsuario" [class.burbuja-bot]="!m.esUsuario">
+        {{ m.texto }}
+        <span class="burbuja-hora">{{ m.hora }}</span>
+      </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div class="burbuja-wrap" *ngIf="cargando()">
+      <div class="burbuja burbuja-bot typing">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="chat-input-area">
+    <textarea
+      class="chat-input"
+      [(ngModel)]="inputTexto"
+      (keydown)="onEnter($event)"
+      placeholder="Escribe tu pregunta..."
+      rows="1"
+      [disabled]="cargando()"
+    ></textarea>
+    <button
+      class="chat-enviar"
+      (click)="enviarMensaje()"
+      [disabled]="cargando() || !inputTexto.trim()"
+    >
+      ➤
+    </button>
+  </div>
+</div>

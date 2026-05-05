@@ -20,7 +20,7 @@ import {
   LucideAngularModule, ShoppingCart, Heart, User, Menu,
   ShieldCheck, Package, FileText, BarChart2, X
 } from 'lucide-angular';
-
+import { ChatbotComponent } from './componentes/3-VerCatalogo/chatbot/chatbot.component';
 /**
  * Componente raíz de la aplicación.
  *
@@ -39,7 +39,7 @@ import {
     ReactiveFormsModule,
     NgxSonnerToaster,
     MatToolbarModule,
-    MatSidenavModule,
+    MatSidenavModule,ChatbotComponent,
     MatListModule,
     MatIconModule,
     MatButtonModule,
